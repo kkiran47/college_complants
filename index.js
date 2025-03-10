@@ -157,7 +157,7 @@ app.post('/handleform', (req, res) => {
                 return res.send("registration unsuccessful");
             }
             console.log(result);
-            const successFile = path.join(__dirname, 'success.html');
+            const successFile = path.join(__dirname,'public', 'success.html');
             return res.sendFile(successFile);
         });
     } catch (err) {
@@ -179,7 +179,7 @@ app.post('/suggestform', (req, res) => {
                 return res.send("registration unsuccessful");
             }
             console.log(result);
-            const successFile = path.join(__dirname, 'thank.html');
+            const successFile = path.join(__dirname,'public', 'thank.html');
             return res.sendFile(successFile);
         });
     } catch (err) {
