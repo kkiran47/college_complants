@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .about-us {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .about-us h1 {
+            color: #333;
+        }
+
+        .about-us p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <section class="about-us">
+        <h1>About Us</h1>
+        <p>We are a team of passionate individuals dedicated to providing the best services and products to our customers. Our mission is to make a difference through our work and build a better future.</p>
+        <button id="learnMoreBtn">Learn More</button>
+        <p id="moreInfo" class="hidden">Our team consists of experts in various fields who work together to achieve our goals. We value integrity, innovation, and customer satisfaction.</p>
+    </section>
+
+    <script>
+        document.getElementById('learnMoreBtn').addEventListener('click', function() {
+            var moreInfo = document.getElementById('moreInfo');
+            if (moreInfo.classList.contains('hidden')) {
+                moreInfo.classList.remove('hidden');
+            } else {
+                moreInfo.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

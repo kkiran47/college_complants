@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Display</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        h1 {
+            color: #495057;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            background: #ffffff;
+            margin: 10px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        ul li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .data-item {
+            margin-bottom: 15px;
+        }
+
+        .data-item strong {
+            color: #007bff;
+        }
+
+        .nav-bar {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .nav-bar a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-bar a:hover {
+            color: #007bff;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+        }
+
+        .header nav {
+            display: flex;
+        }
+
+        .header nav a {
+            margin: 0 10px;
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .header nav a:hover {
+            color: #ffc107;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #343a40;
+            color: #ffffff;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Data Display</h1>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/cc">Complaint Form</a>
+            <a href="/aboutus">About Us</a>
+            <a href="/contact">Contact</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h1>Complaints</h1>
+        <ul id="complaints-list" class="data-list"></ul>
+
+        <h1>Suggestions</h1>
+        <ul id="suggestions-list" class="data-list"></ul>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 College Complaints. All rights reserved.</p>
+    </div>
+
+    <script>
+        fetch('/fetch-complaints')
+            .then(response => response.json())
+            .then(data => {
+                const complaintsList = document.getElementById('complaints-list');
+                data.forEach(complaint => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('data-item');
+                    listItem.innerHTML = `<strong>Category:</strong> ${complaint.category}<br><strong>Description:</strong> ${complaint.description}<br><strong>File:</strong> ${complaint.file}<br><strong>Student Name:</strong> ${complaint.sname}`;
+                    complaintsList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching complaints:', error));
+
+        fetch('/fetch-suggestions')
+            .then(response => response.json())
+            .then(data => {
+                const suggestionsList = document.getElementById('suggestions-list');
+                data.forEach(suggestion => {
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('data-item');
+                    listItem.innerHTML = `<strong>Name:</strong> ${suggestion.name}<br><strong>Suggestion:</strong> ${suggestion.suggestcol}`;
+                    suggestionsList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error fetching suggestions:', error));
+    </script>
+</body>
+</html>

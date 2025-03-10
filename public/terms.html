@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms and Conditions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .terms-and-conditions {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .terms-and-conditions h1 {
+            color: #333;
+        }
+
+        .terms-and-conditions p,
+        .terms-and-conditions ul {
+            color: #666;
+        }
+
+        .terms-and-conditions ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <section class="terms-and-conditions">
+        <h1>Terms and Conditions</h1>
+        <p>By using this website, you agree to the following terms and conditions:</p>
+        <ul>
+            <li>You accept and agree to the Privacy Policy and Terms of Service.</li>
+            <li>You will not use this website for any unlawful or prohibited activities.</li>
+            <li>You agree to respect the rights of others and their content.</li>
+            <!-- Add more terms as needed -->
+        </ul>
+        <button id="showMoreBtn">Show More</button>
+        <div id="moreTerms" class="hidden">
+            <p>Additional terms and conditions apply to the use of certain features of the website. By accessing and using these features, you agree to these additional terms and conditions.</p>
+            <ul>
+                <li>Limitation of liability: The website owners are not liable for any damages arising from the use of this website.</li>
+                <li>Indemnification: You agree to indemnify and hold harmless the website owners from any claims arising from your use of the website.</li>
+                <!-- Add more detailed terms as needed -->
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('showMoreBtn').addEventListener('click', function() {
+            var moreTerms = document.getElementById('moreTerms');
+            if (moreTerms.classList.contains('hidden')) {
+                moreTerms.classList.remove('hidden');
+                this.textContent = 'Show Less';
+            } else {
+                moreTerms.classList.add('hidden');
+                this.textContent = 'Show More';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suggestions</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .suggestions {
+      max-width: 600px;
+      width: 100%;
+      margin: 2em auto;
+      padding: 2em;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+    .suggestions h2 {
+      text-align: center;
+      color: #28a745;
+      margin-bottom: 1em;
+      font-size: 2em;
+      font-weight: 700;
+    }
+    .form-group {
+      margin-bottom: 1.5em;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5em;
+      font-size: 1.1em;
+      font-weight: 600;
+      color: #333;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75em;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      transition: border-color 0.3s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #28a745;
+      outline: none;
+    }
+    .char-count {
+      text-align: right;
+      font-size: 0.9em;
+      color: #666;
+    }
+    .progress-bar {
+      width: 100%;
+      background-color: #f4f4f4;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 0.5em;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .progress-bar div {
+      height: 10px;
+      width: 0;
+      background-color: #28a745;
+      transition: width 0.3s;
+    }
+    .btn-submit {
+      display: block;
+      width: 100%;
+      background: linear-gradient(45deg, #28a745, #218838);
+      color: #fff;
+      padding: 0.75em;
+      text-align: center;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+      margin-top: 1em;
+    }
+    .btn-submit:hover {
+      background: linear-gradient(45deg, #218838, #1e7a33);
+      transform: translateY(-3px);
+    }
+    .thank-you-message,
+    .error-message {
+      display: none;
+      text-align: center;
+      margin-top: 1em;
+      font-size: 1.1em;
+      font-weight: 600;
+    }
+    .thank-you-message {
+      color: #28a745;
+    }
+    .error-message {
+      color: #d9534f;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <section class="suggestions">
+    <h2>Share Your Suggestions</h2>
+    <form action="/suggestform" method="post">
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="suggestion">Suggestion:</label>
+        <textarea id="suggestcol" name="suggestcol" rows="5" maxlength="500" required></textarea>
+        <div class="char-count" id="charCount">0/500</div>
+        <div class="progress-bar"><div id="progressBar"></div></div>
+      </div>
+      <button type="submit" class="btn-submit">Submit Suggestion</button>
+    </form>
+    <div id="thankYouMessage" class="thank-you-message">
+      Thank you for your suggestion! We appreciate your input.
+    </div>
+    <div id="errorMessage" class="error-message">
+      Please fill in all fields before submitting your suggestion.
+    </div>
+  </section>
+
+  <script>
+    const suggestionForm = document.getElementById('suggestionForm');
+    const thankYouMessage = document.getElementById('thankYouMessage');
+    const errorMessage = document.getElementById('errorMessage');
+    const charCount = document.getElementById('charCount');
+    const progressBar = document.getElementById('progressBar');
+    const suggestionTextarea = document.getElementById('suggestion');
+
+    suggestionTextarea.addEventListener('input', function() {
+      const currentLength = suggestionTextarea.value.length;
+      charCount.textContent = `${currentLength}/500`;
+      progressBar.style.width = `${(currentLength / 500) * 100}%`;
+    });
+
+    suggestionForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const suggestion = suggestionTextarea.value.trim();
+
+      if (name && email && suggestion) {
+        thankYouMessage.style.display = 'block';
+        errorMessage.style.display = 'none';
+
+        setTimeout(function() {
+          thankYouMessage.style.display = 'none';
+        }, 5000);
+
+        // Clear the form
+        suggestionForm.reset();
+        charCount.textContent = '0/500';
+        progressBar.style.width = '0';
+      } else {
+        errorMessage.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

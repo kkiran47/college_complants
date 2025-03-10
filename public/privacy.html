@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .privacy-policy {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: left;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .privacy-policy h1 {
+            color: #333;
+        }
+
+        .privacy-policy p,
+        .privacy-policy ul {
+            color: #666;
+        }
+
+        .privacy-policy ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <section class="privacy-policy">
+        <h1>Privacy Policy</h1>
+        <p>Your privacy is important to us. This privacy policy explains how we collect, use, and protect your personal information.</p>
+        <ul>
+            <li>Information Collection: We collect information you provide when you use our services, such as your name, email address, and other contact details.</li>
+            <li>Information Use: We use the information to provide and improve our services, communicate with you, and personalize your experience.</li>
+            <li>Information Sharing: We do not share your personal information with third parties, except as required by law or with your consent.</li>
+            <!-- Add more privacy policy points as needed -->
+        </ul>
+        <button id="readMoreBtn">Read More</button>
+        <div id="morePolicy" class="hidden">
+            <p>We implement a variety of security measures to maintain the safety of your personal information. Your data is stored securely and only accessible by authorized personnel.</p>
+            <ul>
+                <li>Cookies: We use cookies to enhance your browsing experience. You can choose to disable cookies through your browser settings.</li>
+                <li>Third-Party Links: Our website may contain links to third-party sites. We are not responsible for the privacy practices of these sites.</li>
+                <!-- Add more detailed privacy policy points as needed -->
+            </ul>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('readMoreBtn').addEventListener('click', function() {
+            var morePolicy = document.getElementById('morePolicy');
+            if (morePolicy.classList.contains('hidden')) {
+                morePolicy.classList.remove('hidden');
+                this.textContent = 'Read Less';
+            } else {
+                morePolicy.classList.add('hidden');
+                this.textContent = 'Read More';
+            }
+        });
+    </script>
+</body>
+</html>
