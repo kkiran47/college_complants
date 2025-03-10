@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const mysql2 = require('mysql2');
 const app = express();
-
+  
 const pool = mysql2.createPool({
     host: "127.0.0.1",
     user: "root",
