@@ -1,18 +1,21 @@
+require('dotenv').config();
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const mysql2 = require('mysql2');
 const app = express();
-  
+
 const pool = mysql2.createPool({
-    host: "127.0.0.1",
-    user: "root",
-    password: "kiranprasad@123",
-    database: "college_complaints",
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
 });
+
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
