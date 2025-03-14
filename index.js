@@ -197,7 +197,14 @@ app.get('/fetch-complaints', (req, res) => {
             console.error(err);
             return res.status(500).send("Failed to fetch complaints");
         }
-        res.json(results);
+
+        // Remove or hide the 'sname' attribute in the results
+        const sanitizedResults = results.map(complaint => {
+            const { sname, ...rest } = complaint;
+            return rest;
+        });
+
+        res.json(sanitizedResults);
     });
 });
 
