@@ -77,7 +77,7 @@
         .nav-bar a:hover {
             color: #007bff;
         }
-        
+
         .header {
             display: flex;
             justify-content: space-between;
@@ -151,7 +151,7 @@
                 data.forEach(complaint => {
                     const listItem = document.createElement('li');
                     listItem.classList.add('data-item');
-                    listItem.innerHTML = `<strong>Category:</strong> ${complaint.category}<br><strong>Description:</strong> ${complaint.description}<br><strong>File:</strong> ${complaint.file}<br><strong>Student Name:</strong> ${complaint.sname}`;
+                    listItem.innerHTML = `<strong>Category:</strong> ${complaint.category}<br><strong>Description:</strong> ${complaint.description}<br><strong>File:</strong> ${complaint.file}`;
                     complaintsList.appendChild(listItem);
                 });
             })
