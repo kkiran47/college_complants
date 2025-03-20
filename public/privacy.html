@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #D4EAF7, #F1FAEE);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -17,7 +17,7 @@
         }
 
         .privacy-policy {
-            background-color: white;
+            background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -27,12 +27,15 @@
         }
 
         .privacy-policy h1 {
-            color: #333;
+            color: #1D3557;
+            background: linear-gradient(to right, #1D3557, #457B9D);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .privacy-policy p,
         .privacy-policy ul {
-            color: #666;
+            color: #444;
         }
 
         .privacy-policy ul {
@@ -45,17 +48,18 @@
         }
 
         button {
-            background-color: #007BFF;
+            background: linear-gradient(to right, #007BFF, #0056b3);
             color: white;
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
             cursor: pointer;
             margin-top: 10px;
+            transition: background 0.3s ease;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background: linear-gradient(to right, #0056b3, #003d7a);
         }
     </style>
 </head>
@@ -67,7 +71,6 @@
             <li>Information Collection: We collect information you provide when you use our services, such as your name, email address, and other contact details.</li>
             <li>Information Use: We use the information to provide and improve our services, communicate with you, and personalize your experience.</li>
             <li>Information Sharing: We do not share your personal information with third parties, except as required by law or with your consent.</li>
-            <!-- Add more privacy policy points as needed -->
         </ul>
         <button id="readMoreBtn">Read More</button>
         <div id="morePolicy" class="hidden">
@@ -75,7 +78,6 @@
             <ul>
                 <li>Cookies: We use cookies to enhance your browsing experience. You can choose to disable cookies through your browser settings.</li>
                 <li>Third-Party Links: Our website may contain links to third-party sites. We are not responsible for the privacy practices of these sites.</li>
-                <!-- Add more detailed privacy policy points as needed -->
             </ul>
         </div>
     </section>
