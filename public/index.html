@@ -13,39 +13,88 @@
       margin: 0;
       padding: 0;
       line-height: 1.6;
-      background-color: #f4f4f4;
+      background: linear-gradient(120deg, #004d7a, #008793, #00bf72);
+      color: white;
     }
 
     nav {
-      background: linear-gradient(45deg, #6b6b6b, #1f1f1f);
-      color: #fff;
-      display: flex;
-      justify-content: space-between;
-      padding: 1em;
-    }
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  height: 70px;
+}
+marquee {
+  display: block !important; /* Ensures it appears instantly */
+  visibility: visible !important;
+  font-size: 18px;
+  font-weight: bold;
+  color:rgb(199, 44, 44);
+  background:#77bec4;
+  padding: 5px 2px;
+  margin: 0;
+  position: fixed;
+  top: 100px; /* Right below the navbar */
+  width: 100%;
+  z-index: 999;
+  text-align: center;
+  line-height: 30px;
+  height: 30px;
+  overflow: hidden; /* Prevents flickering */
+  white-space: nowrap; /* Prevents multi-line issues */
+}
+
+
+
+
+
     .logo img {
-      width: 100px;
+      width: 320px;
+      border-radius: 10px;
+      transition: transform 0.3s ease-in-out;
+      border:5px solid #008793;
+      height:85px;
+
     }
+
+    .logo img:hover {
+      transform: scale(1.1);
+    }
+
     .nav-links {
       list-style: none;
       display: flex;
       gap: 1em;
+      margin: 0;
+      padding: 0;
     }
+
     .nav-links a {
       color: #fff;
       text-decoration: none;
       padding: 0.5em 1em;
-      transition: background 0.3s;
-    }
-    .nav-links a:hover {
-      background-color: #575757;
       border-radius: 5px;
+      transition: background 0.3s, transform 0.2s;
     }
+
+    .nav-links a:hover {
+      background-color: #00bf72;
+      
+  color:black; /* Text color changes */
+  transform: scale(1.1); /* Slightly enlarges */
+    }
+
     .main-banner {
       background: url('banner.jpg') no-repeat center center/cover;
       text-align: center;
       color: #fff;
-      padding: 8em 0;
+      padding: 10em 0;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -53,72 +102,92 @@
       justify-content: center;
       animation: fadeIn 2s ease-in-out;
     }
+
     .main-banner::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
+      height: 80%;
       background: rgba(0, 0, 0, 0.5);
       z-index: 1;
+
+  margin-top: 110px; /* 70px (nav) + 30px (marquee) + 10px extra spacing */
+
+
     }
+
     .main-banner h1, .main-banner p, .main-banner .btn-main {
       position: relative;
       z-index: 2;
     }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
+
     .btn-main {
-      background-color: #28a745;
-      color: #fff;
+      background-color: #ffcc00;
+      color: #222;
       padding: 0.75em 1.5em;
       text-decoration: none;
       border-radius: 5px;
-      transition: background 0.3s;
+      transition: background 0.3s, transform 0.2s;
       font-size: 1.2em;
     }
+
     .btn-main:hover {
-      background-color: #218838;
+      background-color: #ff9900;
+      transform: scale(1.1);
     }
+
     .services {
       display: flex;
-      justify-content: space-around;
+      justify-content: center;
+      gap: 2em;
       padding: 4em 0;
       flex-wrap: wrap;
     }
+
     .service-card {
       text-align: center;
       width: 22%;
-      background: #fff;
+      background: rgba(255, 255, 255, 0.2);
       padding: 2em;
       border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s, box-shadow 0.3s;
       margin: 1em 0;
+      text-decoration: none;
+      color: white;
     }
+
     .service-card:hover {
       transform: translateY(-10px);
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
     }
+
     .service-card h3 {
-      color: #28a745;
+      color: #ffcc00;
       margin-bottom: 1em;
     }
+
     .service-card img {
       width: 80px;
       height: 80px;
       margin-bottom: 1em;
     }
+
     footer {
-      background: linear-gradient(45deg, #1f1f1f, #6b6b6b);
+      background: rgba(0, 0, 0, 0.8);
       color: #fff;
       text-align: center;
       padding: 1em 0;
       margin-top: 2em;
     }
+
     .footer-links {
       list-style: none;
       display: flex;
@@ -127,36 +196,47 @@
       padding: 0;
       margin: 0;
     }
+
     .footer-links a {
       color: #fff;
       text-decoration: none;
+      transition: color 0.3s;
     }
+
+    .footer-links a:hover {
+      color: #ffcc00;
+    }
+    
+
   </style>
 </head>
 <body>
-  <nav>
-    <div class="logo">
-      <img src="https://images.shiksha.com/mediadata/images/1652957451phpTc4nIn.jpeg" alt="College Logo">
-    </div>
-    <p style="font-size: 40px;"><b><font color="blue">COLLEGE COMPLAINT PORTAL</b></p>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="aboutus.html">About Us</a></li>
-      <li><a href="cc.html">File a Complaint</a></li>
-      <li><a href="suggest.html">Suggestions</a></li>
-      <li><a href="display.html">Check Status</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+    
+        <nav>
+          <div class="logo">
+            <img src="https://mec.edu.in/storage/2021/11/vignans.png" alt="College Logo">
+          </div>
+          <p style="font-size: 30px; font-weight: bold; color: #ffcc00; margin: 0;">COLLEGE COMPLAINT PORTAL</p>
+          <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="cc.html">File a Complaint</a></li>
+            <li><a href="suggest.html">Suggestions</a></li>
+            <li><a href="display.html">Check Status</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </nav>
+      
+        <marquee> Welcome to the VIGNAN'S INSTITUTE OF INFORMATION TECHNOLOGY College Complaint Portal ! </marquee>
+<section class="main-banner">
+  <h1>Welcome to the College Complaint Portal</h1>
+  <p>Your voice matters. Report issues, track progress, and help us improve.</p>
+  <a href="cc.html" class="btn-main">File a Complaint</a>
+</section>
 
-  <section class="main-banner">
-    <h1>Welcome to the College Complaint Portal</h1>
-    <p>Your voice matters. Report issues, track progress, and help us improve.</p>
-    <a href="cc.html" class="btn-main">File a Complaint</a>
-  </section>
+  
 
   <section class="services">
-    <h2>Our Services</h2>
     <a href="cc.html" class="service-card">
       <img src="https://img.icons8.com/color/96/000000/commercial.png" alt="File a Complaint">
       <h3>File a Complaint</h3>
@@ -168,7 +248,7 @@
       <p>Get updates on the progress of your complaints.</p>
     </a>
     <a href="contact.html" class="service-card">
-      <img src="https://img.icons8.com/color/96/000000/phone.png" alt="Contact Support">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGhwVp1Rvz7UNX4CIsjYF8GofzkAm9Ji_L2MgFkUcN5tRgucZohN_-3NHM4dU2k-gObFI&usqp=CAU" alt="Contact Support">
       <h3>Contact Support</h3>
       <p>Reach out to us for any assistance.</p>
     </a>
