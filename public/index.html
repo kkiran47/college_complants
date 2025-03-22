@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>College Complaint Portal</title>
-  <link rel="stylesheet" href="styles.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
@@ -18,49 +17,38 @@
     }
 
     nav {
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1em;
-  position: fixed;
-  width: 100%;
-  top: 0;
-  z-index: 1000;
-  height: 70px;
-}
-marquee {
-  display: block !important; /* Ensures it appears instantly */
-  visibility: visible !important;
-  font-size: 18px;
-  font-weight: bold;
-  color:rgb(199, 44, 44);
-  background:#77bec4;
-  padding: 5px 2px;
-  margin: 0;
-  position: fixed;
-  top: 100px; /* Right below the navbar */
-  width: 100%;
-  z-index: 999;
-  text-align: center;
-  line-height: 30px;
-  height: 30px;
-  overflow: hidden; /* Prevents flickering */
-  white-space: nowrap; /* Prevents multi-line issues */
-}
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      height: 70px;
+    }
 
-
-
-
+    marquee {
+      font-size: 18px;
+      font-weight: bold;
+      color: rgb(199, 44, 44);
+      background: #77bec4;
+      padding: 5px;
+      position: fixed;
+      top: 100px;
+      width: 100%;
+      z-index: 999;
+      text-align: center;
+    }
 
     .logo img {
       width: 320px;
       border-radius: 10px;
       transition: transform 0.3s ease-in-out;
-      border:5px solid #008793;
-      height:85px;
-
+      border: 5px solid #008793;
+      height: 85px;
     }
 
     .logo img:hover {
@@ -85,9 +73,8 @@ marquee {
 
     .nav-links a:hover {
       background-color: #00bf72;
-      
-  color:black; /* Text color changes */
-  transform: scale(1.1); /* Slightly enlarges */
+      color: black;
+      transform: scale(1.1);
     }
 
     .main-banner {
@@ -100,32 +87,6 @@ marquee {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    .main-banner::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 80%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1;
-
-  margin-top: 110px; /* 70px (nav) + 30px (marquee) + 10px extra spacing */
-
-
-    }
-
-    .main-banner h1, .main-banner p, .main-banner .btn-main {
-      position: relative;
-      z-index: 2;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
 
     .btn-main {
@@ -134,7 +95,6 @@ marquee {
       padding: 0.75em 1.5em;
       text-decoration: none;
       border-radius: 5px;
-      transition: background 0.3s, transform 0.2s;
       font-size: 1.2em;
     }
 
@@ -185,57 +145,35 @@ marquee {
       color: #fff;
       text-align: center;
       padding: 1em 0;
-      margin-top: 2em;
     }
-
-    .footer-links {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 1em;
-      padding: 0;
-      margin: 0;
-    }
-
-    .footer-links a {
-      color: #fff;
-      text-decoration: none;
-      transition: color 0.3s;
-    }
-
-    .footer-links a:hover {
-      color: #ffcc00;
-    }
-    
-
   </style>
 </head>
 <body>
-    
-        <nav>
-          <div class="logo">
-            <img src="https://mec.edu.in/storage/2021/11/vignans.png" alt="College Logo">
-          </div>
-          <p style="font-size: 30px; font-weight: bold; color: #ffcc00; margin: 0;">COLLEGE COMPLAINT PORTAL</p>
-          <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="aboutus.html">About Us</a></li>
-            <li><a href="cc.html">File a Complaint</a></li>
-            <li><a href="suggest.html">Suggestions</a></li>
-            <li><a href="display.html">Check Status</a></li>
-            <li><a href="contact.html">Contact</a></li>
-          </ul>
-        </nav>
-      
-        <marquee> Welcome to the VIGNAN'S INSTITUTE OF INFORMATION TECHNOLOGY College Complaint Portal ! </marquee>
-<section class="main-banner">
-  <h1>Welcome to the College Complaint Portal</h1>
-  <p>Your voice matters. Report issues, track progress, and help us improve.</p>
-  <a href="cc.html" class="btn-main">File a Complaint</a>
-</section>
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">
+      <img src="https://mec.edu.in/storage/2021/11/vignans.png" alt="College Logo">
+    </div>
+    <p style="font-size: 30px; font-weight: bold; color: #ffcc00; margin: 0;">COLLEGE COMPLAINT PORTAL</p>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="aboutus.html">About Us</a></li>
+      <li><a href="cc.html">File a Complaint</a></li>
+      <li><a href="suggest.html">Suggestions</a></li>
+      <li><a href="display.html">Check Status</a></li>
+      <li><a href="update-status.html">Update Status</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+  <marquee> Welcome to the VIGNAN'S INSTITUTE OF INFORMATION TECHNOLOGY College Complaint Portal!</marquee>
 
-  
+  <section class="main-banner">
+    <h1>Welcome to the College Complaint Portal</h1>
+    <p>Your voice matters. Report issues, track progress, and help us improve.</p>
+    <a href="cc.html" class="btn-main">File a Complaint</a>
+  </section>
 
+  <!-- Services Section -->
   <section class="services">
     <a href="cc.html" class="service-card">
       <img src="https://img.icons8.com/color/96/000000/commercial.png" alt="File a Complaint">
@@ -247,8 +185,13 @@ marquee {
       <h3>Track Complaint Status</h3>
       <p>Get updates on the progress of your complaints.</p>
     </a>
+    <a href="update-status.html" class="service-card"> 
+      <img src="https://img.icons8.com/fluency/96/update-left-rotation.png" alt="Update Status">
+      <h3>Update Status</h3>
+      <p>Modify the status of existing complaints quickly.</p>
+    </a>
     <a href="contact.html" class="service-card">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGhwVp1Rvz7UNX4CIsjYF8GofzkAm9Ji_L2MgFkUcN5tRgucZohN_-3NHM4dU2k-gObFI&usqp=CAU" alt="Contact Support">
+      <img src="https://img.icons8.com/color/96/000000/help.png" alt="Contact Support">
       <h3>Contact Support</h3>
       <p>Reach out to us for any assistance.</p>
     </a>
@@ -259,6 +202,7 @@ marquee {
     </a>
   </section>
 
+  <!-- Footer -->
   <footer>
     <p>&copy; 2025 College Complaint Portal. All Rights Reserved.</p>
     <ul class="footer-links">
