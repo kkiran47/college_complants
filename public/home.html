@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Complaint Portal</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      line-height: 1.6;
+      background: linear-gradient(120deg, #004d7a, #008793, #00bf72);
+      color: white;
+    }
+
+    nav {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1em;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      height: 70px;
+    }
+
+    marquee {
+      font-size: 18px;
+      font-weight: bold;
+      color: rgb(199, 44, 44);
+      background: #77bec4;
+      padding: 5px;
+      position: fixed;
+      top: 100px;
+      width: 100%;
+      z-index: 999;
+      text-align: center;
+    }
+
+    .logo img {
+      width: 320px;
+      border-radius: 10px;
+      transition: transform 0.3s ease-in-out;
+      border: 5px solid #008793;
+      height: 85px;
+    }
+
+    .logo img:hover {
+      transform: scale(1.1);
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      gap: 1em;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      padding: 0.5em 1em;
+      border-radius: 5px;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .nav-links a:hover {
+      background-color: #00bf72;
+      color: black;
+      transform: scale(1.1);
+    }
+
+    .main-banner {
+      background: url('banner.jpg') no-repeat center center/cover;
+      text-align: center;
+      color: #fff;
+      padding: 10em 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-main {
+      background-color: #ffcc00;
+      color: #222;
+      padding: 0.75em 1.5em;
+      text-decoration: none;
+      border-radius: 5px;
+      font-size: 1.2em;
+    }
+
+    .btn-main:hover {
+      background-color: #ff9900;
+      transform: scale(1.1);
+    }
+
+    .services {
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      padding: 4em 0;
+      flex-wrap: wrap;
+    }
+
+    .service-card {
+      text-align: center;
+      width: 22%;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin: 1em 0;
+      text-decoration: none;
+      color: white;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    .service-card h3 {
+      color: #ffcc00;
+      margin-bottom: 1em;
+    }
+
+    .service-card img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1em;
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      text-align: center;
+      padding: 1em 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">
+      <img src="https://mec.edu.in/storage/2021/11/vignans.png" alt="College Logo">
+    </div>
+    <p style="font-size: 30px; font-weight: bold; color: #ffcc00; margin: 0;">COLLEGE COMPLAINT PORTAL</p>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="aboutus.html">About Us</a></li>
+      <li><a href="cc.html">File a Complaint</a></li>
+      <li><a href="suggest.html">Suggestions</a></li>
+      <li><a href="display.html">Check Status</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+  <marquee> Welcome to the VIGNAN'S INSTITUTE OF INFORMATION TECHNOLOGY College Complaint Portal!</marquee>
+
+  <section class="main-banner">
+    <h1>Welcome to the College Complaint Portal</h1>
+    <p>Your voice matters. Report issues, track progress, and help us improve.</p>
+    <a href="cc.html" class="btn-main">File a Complaint</a>
+  </section>
+
+  <!-- Services Section -->
+  <section class="services">
+    <a href="cc.html" class="service-card">
+      <img src="https://img.icons8.com/color/96/000000/commercial.png" alt="File a Complaint">
+      <h3>File a Complaint</h3>
+      <p>Submit your complaint easily and securely.</p>
+    </a>
+    <a href="display.html" class="service-card">
+      <img src="https://img.icons8.com/color/96/000000/computer.png" alt="Track Status">
+      <h3>Track Complaint Status</h3>
+      <p>Get updates on the progress of your complaints.</p>
+    </a>
+    <a href="contact.html" class="service-card">
+      <img src="https://img.icons8.com/color/96/000000/help.png" alt="Contact Support">
+      <h3>Contact Support</h3>
+      <p>Reach out to us for any assistance.</p>
+    </a>
+    <a href="suggest.html" class="service-card">
+      <img src="https://img.icons8.com/color/96/000000/idea.png" alt="Suggestions">
+      <h3>Suggestions</h3>
+      <p>Share your ideas to help us improve.</p>
+    </a>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 College Complaint Portal. All Rights Reserved.</p>
+    <ul class="footer-links">
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms of Service</a></li>
+    </ul>
+  </footer>
+</body>
+</html>
