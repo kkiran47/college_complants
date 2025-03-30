@@ -22,18 +22,14 @@ const pool = mysql2.createPool({
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Multer storage configuration
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 5 * 1024 * 1024 } // Limit to 5 MB
 });
-
-
-// Serve static files and HTML pages
 app.get('/', (req, res) => {
-    const htmlfile = path.join(__dirname, 'public', 'index.html');
+    console.log('Serving main.html');
+    const htmlfile = path.join(__dirname, 'public', 'main.html');
     res.sendFile(htmlfile, (err) => {
         if (err) {
             console.error(err);
@@ -41,9 +37,9 @@ app.get('/', (req, res) => {
         }
     });
 });
-
+app.use(express.static(path.join(__dirname, 'public')));
 // Other static page routes
-['cc', 'aboutus', 'contact', 'privacy', 'terms', 'home', 'suggest', 'display'].forEach(route => {
+['cc', 'aboutus', 'contact','home', 'privacy', 'terms', 'index', 'suggest', 'display'].forEach(route => {
     app.get(`/${route}`, (req, res) => {
         const htmlfile = path.join(__dirname, 'public', `${route}.html`);
         res.sendFile(htmlfile, (err) => {
@@ -54,37 +50,95 @@ app.get('/', (req, res) => {
         });
     });
 });
+app.post('/admin-login', (req, res) => {
+    const { username, password } = req.body;
+    console.log('Login attempt:', username);
 
+    // Hardcoded credentials for admin login
+    const validUsername = 'admin';
+    const validPassword = 'admin123';
+
+    // Check if the provided username and password match the hardcoded credentials
+    if (username === validUsername && password === validPassword) {
+        const currentTime = new Date().toISOString().slice(0, 19).replace('T', ' ');  // Convert to 'YYYY-MM-DD HH:mm:ss'
+        console.log('Login successful. Current login time:', currentTime);
+
+        // Fetch the admin's last login time from the database
+        const getLastLoginQuery = "SELECT last_login FROM admins WHERE username = ?";
+        pool.query(getLastLoginQuery, [username], (err, results) => {
+            if (err) {
+                console.error("Error fetching last login:", err);
+                return res.status(500).json({ error: "Server error occurred while fetching last login." });
+            }
+
+            const lastLogin = results.length > 0 ? results[0].last_login : null;
+            console.log('Last login time:', lastLogin);
+
+            // Update the admin's last login time to the current time
+            const updateLoginQuery = "UPDATE admins SET last_login = ? WHERE username = ?";
+            pool.query(updateLoginQuery, [currentTime, username], (err) => {
+                if (err) {
+                    console.error("Error updating last login:", err);
+                    return res.status(500).json({ error: "Server error occurred while updating login time." });
+                }
+
+                console.log("Last login updated successfully!");
+
+                // Fetch new complaints raised after the last login time (starting from current login)
+                const fetchNewComplaintsQuery = `
+                    SELECT category, description, status, sname, timestamp 
+                    FROM complaints 
+                    WHERE timestamp > ? AND status = 'uncleared'
+                `;
+                // Use the current login time as the cutoff for new complaints
+                pool.query(fetchNewComplaintsQuery, [lastLogin || '1970-01-01'], (err, complaints) => {
+                    if (err) {
+                        console.error("Error fetching complaints:", err);
+                        return res.status(500).json({ error: "Server error occurred while fetching complaints." });
+                    }
+
+                    // Return the new complaints (no reset of complaint count)
+                    const newComplaints = complaints || [];
+                    console.log('New complaints count:', newComplaints.length);
+
+                    // Send response back to frontend with the new complaints and redirect info
+                    res.json({
+                        success: true,
+                        newComplaints: newComplaints,
+                        redirect: '/index'  // Redirecting after login
+                    });
+                });
+            });
+        });
+    } else {
+        console.log('Invalid username or password');
+        res.status(401).json({ success: false, message: "Invalid username or password" });
+    }
+});
 
 app.post('/handleform', upload.single('filepath'), (req, res) => {
     try {
-        const { category, description, sname } = req.body; // Extract text fields
-        const fileBuffer = req.file?.buffer || null; // Optional file upload
+        const { category, description, sname } = req.body;
+        const fileBuffer = req.file?.buffer || null;
 
-        console.log("Form Data:", req.body); // Debugging
-        console.log("Uploaded File:", req.file); // Debugging
+        // Convert ISO 8601 format to MySQL compatible format (YYYY-MM-DD HH:MM:SS.sss)
+        const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-        const SQL_COMMAND = "INSERT INTO complaints (category, description, filepath, sname, status) VALUES (?, ?, ?, ?, 'uncleared')";
-        pool.query(SQL_COMMAND, [category, description, fileBuffer, sname], (err, result) => {
+        const SQL_COMMAND = "INSERT INTO complaints (category, description, filepath, sname, status, timestamp) VALUES (?, ?, ?, ?, 'uncleared', ?)";
+        pool.query(SQL_COMMAND, [category, description, fileBuffer, sname, timestamp], (err, result) => {
             if (err) {
-                console.error("SQL error:", err); // Log SQL errors
+                console.error("SQL error:", err);
                 return res.status(500).send("Registration unsuccessful");
             }
-            console.log("SQL Result:", result); // Debugging
-
-            // Send success page
             const successFile = path.join(__dirname, 'public', 'success.html');
             return res.sendFile(successFile);
         });
     } catch (err) {
-        console.error("Server error:", err); // Log server errors
+        console.error("Server error:", err);
         res.status(500).send("An error occurred");
     }
 });
 
-
-
-// Handle suggestion form submissions
 app.post('/suggestform', (req, res) => {
     try {
         const { name, suggestcol } = req.body;
