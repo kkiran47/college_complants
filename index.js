@@ -5,6 +5,7 @@ const fs = require('fs');
 const mysql2 = require('mysql2');
 const cors = require('cors'); 
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 const app = express();
 
 // Database connection pool
@@ -118,14 +119,14 @@ app.post('/admin-login', (req, res) => {
 
 app.post('/handleform', upload.single('filepath'), (req, res) => {
     try {
-        const { category, description, sname } = req.body;
+        const { category, description, sname, email } = req.body;
         const fileBuffer = req.file?.buffer || null;
 
         // Convert ISO 8601 format to MySQL compatible format (YYYY-MM-DD HH:MM:SS.sss)
         const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-        const SQL_COMMAND = "INSERT INTO complaints (category, description, filepath, sname, status, timestamp) VALUES (?, ?, ?, ?, 'uncleared', ?)";
-        pool.query(SQL_COMMAND, [category, description, fileBuffer, sname, timestamp], (err, result) => {
+        const SQL_COMMAND = "INSERT INTO complaints (category, description, filepath, sname, email, status, timestamp) VALUES (?, ?, ?, ?, ?, 'uncleared', ?)";
+        pool.query(SQL_COMMAND, [category, description, fileBuffer, sname, email, timestamp], (err, result) => {
             if (err) {
                 console.error("SQL error:", err);
                 return res.status(500).send("Registration unsuccessful");
@@ -204,8 +205,20 @@ app.get('/fetch-suggestions', (req, res) => {
         res.json(results); // Send suggestions to the frontend
     });
 });
-
-// Update complaint status (cleared or uncleared)
+let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 587,   
+    secure: false,  
+    tls: {
+      rejectUnauthorized: false 
+    },
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  });
+  
+  
 app.put('/update-status', (req, res) => {
     const { category, description, status } = req.body;
 
@@ -225,10 +238,43 @@ app.put('/update-status', (req, res) => {
             return res.status(404).send("No matching complaint found.");
         }
 
+   
+        if (status === 'cleared') {
+            const fetchStudentEmailQuery = "SELECT sname, email FROM complaints WHERE category = ? AND description = ?";
+            pool.query(fetchStudentEmailQuery, [category, description], (err, results) => {
+                if (err) {
+                    console.error("Error fetching student email:", err);
+                    return res.status(500).send("Error fetching student email.");
+                }
+
+                if (results.length > 0) {
+                    const student = results[0];
+                    const studentEmail = student.email;
+
+                    const mailOptions = {
+                        from: process.env.EMAIL_USER, // Sender address
+                        to: studentEmail, // Recipient address
+                        subject: 'Complaint Status Update', // Subject line
+                        text: `Dear ${student.sname},\n\nYour complaint regarding the category "${category}" has been marked as cleared. Thank you for your patience!\n\nBest regards,\nYour Support Team`, // Plain text body
+                    };
+
+                    // Send the email
+                    transporter.sendMail(mailOptions, (error, info) => {
+                        if (error) {
+                            console.error("Error sending email:", error);
+                        } else {
+                            console.log("Email sent:", info.response);
+                        }
+                    });
+                } else {
+                    console.log("Student email not found.");
+                }
+            });
+        }
+
         res.send("Complaint status successfully updated.");
     });
 });
-
 
 // Serve display page for complaints and suggestions
 app.get('/display', (req, res) => {
@@ -240,8 +286,6 @@ app.get('/display', (req, res) => {
         }
     });
 });
-
-// Start the server
 const PORT = process.env.PORT || 4348;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
