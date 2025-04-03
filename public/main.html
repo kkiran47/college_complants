@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login page</title>
+    <title>Login Page</title>
     <style>
-        /* General Body Styles */
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
@@ -16,8 +15,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            animation: backgroundAnimation 15s ease infinite;
         }
+
         .navbar {
             width: 100%;
             background: #2c3e50;
@@ -36,9 +35,7 @@
             height: 60px;
             margin-left: 20px;
             width: 700px;
-            border-radius:10px;
-
-        
+            border-radius: 10px;
         }
 
         .navbar ul {
@@ -62,7 +59,8 @@
         .navbar ul li a:hover {
             color: #66bb6a;
         }
-        .content {
+
+        .container {
             margin-top: 80px;
             width: 100%;
             display: flex;
@@ -70,48 +68,19 @@
             align-items: center;
         }
 
-        /* Keyframe Animation for Background */
-        @keyframes backgroundAnimation {
-            0% { background: linear-gradient(to right, #43e97b, #38f9d7); }
-            50% { background: linear-gradient(to right, #32a852, #17c1b3); }
-            100% { background: linear-gradient(to right, #43e97b, #38f9d7); }
-        }
-
-        /* Main Container */
-        .container {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            width: 80%;
-            max-width: 1200px;
-            height: 70%;
-            border-radius: 50px;
-            background-color:aquamarine;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            animation: slideIn 1.5s ease-out;
-            border :5px solid black;
-        }
-
-        /* Slide-in Animation */
-        @keyframes slideIn {
-            0% { opacity: 0; transform: translateX(-50%); }
-            100% { opacity: 1; transform: translateX(0); }
-        }
-
-        /* Login Box */
         .login-box {
             display: flex;
-            justify-content: space-between;
-            width: 100%;
+            justify-content: space-around;
+            width: 80%;
+            max-width: 800px;
             padding: 30px;
-            animation: fadeIn 1s ease-out;
-           gap:30px;
+            background: aquamarine;
+            border-radius: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
         }
 
-        /* Login Section */
         .section {
-            width: 48%;
+            width: 45%;
             background: linear-gradient(to top left, #32a852, #17c1b3);
             border-radius: 15px;
             color: white;
@@ -119,7 +88,6 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
             transition: transform 0.4s ease, box-shadow 0.4s ease;
         }
@@ -132,15 +100,11 @@
         .section h3 {
             font-size: 2rem;
             margin-bottom: 20px;
-            font-weight: bold;
-            color: #fff;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            color: white;
         }
 
-        /* Button Styles */
-        .student-btn,
-        .login-btn {
-            background:green;
+        .student-btn, .login-btn {
+            background: green;
             color: white;
             padding: 12px 30px;
             font-size: 20px;
@@ -150,20 +114,15 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             margin: 20px 0;
-            transition: all 0.3s ease;
             width: 80%;
-            font-family:Verdana, Geneva, Tahoma, sans-serif;
-
         }
 
-        .student-btn:hover,
-        .login-btn:hover {
+        .student-btn:hover, .login-btn:hover {
             background: #4caf50;
             transform: translateY(-5px);
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        /* Input Fields */
         .login-input {
             padding: 12px 20px;
             margin: 10px 0;
@@ -184,13 +143,16 @@
             box-shadow: 0 0 10px rgba(102, 187, 106, 0.6);
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
-            .login-box { flex-direction: column; }
-            .section { width: 100%; margin-bottom: 20px; }
+            .login-box {
+                flex-direction: column;
+            }
+            .section {
+                width: 100%;
+                margin-bottom: 20px;
+            }
         }
 
-        /* Custom Alert Modal */
         .modal {
             display: none;
             position: fixed;
@@ -201,7 +163,6 @@
             background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
-            animation: fadeInModal 0.3s ease;
         }
 
         .modal-content {
@@ -212,9 +173,6 @@
             font-size: 18px;
             text-align: center;
             max-width: 400px;
-            margin: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            animation: slideInModal 0.5s ease-out;
         }
 
         .modal-content button {
@@ -226,32 +184,10 @@
             border-radius: 25px;
             cursor: pointer;
             margin-top: 20px;
-            transition: background 0.3s ease;
         }
 
         .modal-content button:hover {
             background: #e64a19;
-        }
-
-        @keyframes fadeInModal {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes slideInModal {
-            0% { transform: translateY(-50px); }
-            100% { transform: translateY(0); }
-        }
-
-        /* Complaint Modal Styling */
-        .complaint-modal .modal-content {
-            background: #2196f3;
-        }
-        .complaint-modal button {
-            background: #1976d2;
-        }
-        .complaint-modal button:hover {
-            background: #1565c0;
         }
     </style>
 </head>
@@ -263,15 +199,14 @@
             <li><a href="about.html">About</a></li>
             <li><a href="con.html">Contact</a></li>
         </ul>
-    </nav>   
-   
-    <br><br><br>
+    </nav>
+
     <div class="container">
         <div class="login-box">
             <div class="section">
                 <h3>Student</h3>
                 <button class="student-btn" onclick="redirectToStudentPage()">Go to Student Portal</button>
-            </div> <br><br><br>
+            </div>
             <div class="section">
                 <h3>Administration</h3>
                 <form id="admin-login-form">
@@ -288,14 +223,6 @@
         <div class="modal-content">
             <p id="alert-message">Invalid Username or Password.</p>
             <button onclick="closeAlert()">Close</button>
-        </div>
-    </div>
-
-    <!-- New Complaint Notification Modal -->
-    <div class="modal complaint-modal" id="complaint-modal">
-        <div class="modal-content">
-            <p id="complaint-message">New complaints have been raised since your last login!</p>
-            <button onclick="proceedToDashboard()">Go to Dashboard</button>
         </div>
     </div>
 
@@ -320,19 +247,13 @@
                 const data = await response.json();
 
                 if (data.success) {
-                    const newComplaintsCount = data.newComplaints.length;  // Get the count of new complaints
-                    
-                    // Show modal if there are new complaints
+                    const newComplaintsCount = data.newComplaints.length;
+
                     if (newComplaintsCount > 0) {
-                        document.getElementById('complaint-message').textContent = 
-                            ${newComplaintsCount} new complaint(s) have been raised since your last login!;
-                        document.getElementById('complaint-modal').style.display = 'flex';
-                    } else {
-                        // If no new complaints, just redirect to index.html
-                        window.location.href = 'index.html';
+                        alert(`You have ${newComplaintsCount} new complaint(s)!`);
                     }
+                    window.location.href = 'index.html';
                 } else {
-                    // Show error modal for invalid login
                     const alertMessage = data.message || "Invalid login attempt. Please check your credentials.";
                     document.getElementById('alert-message').textContent = alertMessage;
                     document.getElementById('alert-modal').style.display = 'flex';
@@ -343,12 +264,6 @@
                 document.getElementById('alert-modal').style.display = 'flex';
             }
         });
-
-        // Modal close handlers
-        function proceedToDashboard() {
-            document.getElementById('complaint-modal').style.display = 'none';
-            window.location.href = 'index.html';  // Always redirect to index.html after viewing complaints
-        }
 
         function closeAlert() {
             document.getElementById('alert-modal').style.display = 'none';
