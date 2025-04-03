@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaints and Suggestions</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: background-color 0.5s ease;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 3rem;
+            color: #00796b;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 50px;
+            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1600px;
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .complaints-columns {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+
+        .complaints-column {
+            flex: 1 1 45%;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: 800px;
+            animation: slideUp 1s ease-in-out;
+        }
+
+        .complaints-column h2 {
+            font-size: 1.5rem;
+            color: #00796b;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .complaint {
+            background: #ffffff;
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            animation: fadeIn 1s forwards, bounceIn 1s ease-out;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .complaint:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .complaint .header {
+            font-weight: bold;
+            font-size: 1rem;
+            color: #00796b;
+        }
+
+        .status.cleared {
+            color: green;
+        }
+
+        .status.uncleared {
+            color: red;
+        }
+
+        img {
+            width: 50px;
+            height: 50px;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+        }
+
+        /* Animation for fading and bouncing in complaints */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                transform: scale(0.5);
+            }
+            60% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Animation for slide-in effect */
+        @keyframes slideUp {
+            0% {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        #suggestions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: space-evenly;
+            margin-top: 50px;
+            animation: slideUp 1s ease-in-out;
+        }
+
+        .suggestion {
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .suggestion:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .suggestion .header {
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #00796b;
+            margin-bottom: 10px;
+        }
+
+        .suggestion p {
+            color: #333;
+            font-size: 1rem;
+        }
+     nav {
+            background: rgba(29, 53, 87, 0.9);
+            color: white;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index:10;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+            animation: slideIn 1s ease-out;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 15px;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+
+        nav ul li a:hover {
+            color: #ffd700;
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+         <nav>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li><a href="cc.html">File a Complaint</a></li>
+            <li><a href="suggest.html">Suggestions</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1>Complaints</h1>
+        <div class="complaints-columns">
+            <div class="complaints-column" id="cleared-complaints">
+                <h2>Cleared Complaints</h2>
+                <!-- Cleared complaints will be dynamically populated here -->
+            </div>
+            <div class="complaints-column" id="uncleared-complaints">
+                <h2>Uncleared Complaints</h2>
+                <!-- Uncleared complaints will be dynamically populated here -->
+            </div>
+        </div>
+
+        <h1>Suggestions</h1>
+        <div id="suggestions-container">
+            <!-- Suggestions will be dynamically populated here -->
+        </div>
+    </div>
+
+    <script>
+        // Fetch complaints and separate them into cleared and uncleared categories
+        fetch('/fetch-complaints')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch complaints. Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const clearedContainer = document.getElementById('cleared-complaints');
+                const unclearedContainer = document.getElementById('uncleared-complaints');
+
+                clearedContainer.innerHTML = '';
+                unclearedContainer.innerHTML = '';
+
+                data.forEach(complaint => {
+                    const complaintDiv = document.createElement('div');
+                    complaintDiv.classList.add('complaint');
+                    const statusClass = complaint.status === 'cleared' ? 'cleared' : 'uncleared';
+
+                    complaintDiv.innerHTML = `
+                        <div class="header">Category: ${complaint.category}</div>
+                        <div>Description: ${complaint.description}</div>
+                        <div class="status ${statusClass}">Status: ${complaint.status}</div>
+                        <div>
+                            File: ${
+                                complaint.filepath
+                                ? `<a href="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" target="_blank">
+                                        <img src="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" 
+                                             alt="Complaint Image" 
+                                             onerror="this.src='/path-to-placeholder-image.jpg'; this.alt='Image not found';">
+                                   </a>`
+                                : 'No File'
+                            }
+                        </div>
+                    `;
+
+                    if (complaint.status === 'cleared') {
+                        clearedContainer.appendChild(complaintDiv);
+                    } else {
+                        unclearedContainer.appendChild(complaintDiv);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching complaints:', error);
+                const clearedContainer = document.getElementById('cleared-complaints');
+                const unclearedContainer = document.getElementById('uncleared-complaints');
+                clearedContainer.innerHTML = `<div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">Failed to load complaints. Please try again later.</div>`;
+                unclearedContainer.innerHTML = `<div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">Failed to load complaints. Please try again later.</div>`;
+            });
+
+        // Fetch suggestions and populate them
+        fetch('/fetch-suggestions')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch suggestions. Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                const suggestionsContainer = document.getElementById('suggestions-container');
+                suggestionsContainer.innerHTML = "";
+                data.forEach(suggestion => {
+                    const suggestionDiv = document.createElement('div');
+                    suggestionDiv.classList.add('suggestion');
+                    suggestionDiv.innerHTML = `
+                        <div class="header">Name: ${suggestion.name}</div>
+                        <p>Suggestion: ${suggestion.suggestcol}</p>
+                    `;
+                    suggestionsContainer.appendChild(suggestionDiv);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching suggestions:', error);
+                const suggestionsContainer = document.getElementById('suggestions-container');
+                suggestionsContainer.innerHTML = `
+                    <div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">
+                        Failed to load suggestions. Please try again later.
+                    </div>
+                `;
+            });
+    </script>
+</body>
+</html>
