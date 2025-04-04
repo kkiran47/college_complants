@@ -143,16 +143,6 @@
             box-shadow: 0 0 10px rgba(102, 187, 106, 0.6);
         }
 
-        @media (max-width: 768px) {
-            .login-box {
-                flex-direction: column;
-            }
-            .section {
-                width: 100%;
-                margin-bottom: 20px;
-            }
-        }
-
         /* Popup Modal Styling */
         .modal {
             display: none;
@@ -214,6 +204,63 @@
             }
             to {
                 transform: scale(1);
+            }
+        }
+
+        /* Mobile View */
+        @media (max-width: 768px) {
+            .navbar img {
+                width: 60%;
+                margin-left: 10px;
+            }
+
+            .navbar ul {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .navbar ul li {
+                margin: 10px 0;
+            }
+
+            .login-box {
+                flex-direction: column;
+                width: 90%;
+                padding: 20px;
+            }
+
+            .section {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .student-btn, .login-btn {
+                width: 100%;
+                font-size: 18px;
+                padding: 12px 0;
+            }
+
+            .login-input {
+                width: 100%;
+                font-size: 18px;
+                padding: 15px;
+            }
+
+            .modal-content {
+                width: 90%;
+                max-width: 350px;
+            }
+        }
+
+        /* Smallest Mobile View */
+        @media (max-width: 480px) {
+            .navbar img {
+                width: 80%;
+                height: auto;
+            }
+
+            .modal-content {
+                width: 90%;
             }
         }
     </style>
