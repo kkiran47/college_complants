@@ -146,6 +146,67 @@
       text-align: center;
       padding: 1em 0;
     }
+
+    /* Mobile View Adjustments */
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+      }
+
+      .logo img {
+        width: 250px;
+        height: 60px;
+      }
+
+      .nav-links {
+        flex-direction: column;
+        margin-top: 10px;
+        width: 100%;
+        align-items: center;
+      }
+
+      .nav-links a {
+        padding: 1em;
+        width: 100%;
+        text-align: center;
+      }
+
+      .main-banner {
+        padding: 6em 0;
+      }
+
+      .services {
+        gap: 1em;
+        flex-direction: column;
+        align-items: center;
+        padding: 2em 0;
+      }
+
+      .service-card {
+        width: 80%;
+      }
+
+      .btn-main {
+        font-size: 1em;
+      }
+    }
+
+    /* Smaller screens */
+    @media (max-width: 480px) {
+      .service-card {
+        width: 90%;
+      }
+
+      .btn-main {
+        font-size: 1.1em;
+      }
+
+      marquee {
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -163,6 +224,8 @@
       <li><a href="display.html">Check Status</a></li>
       <li><a href="update-status.html">Update Status</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <!-- Logout Option -->
+      <li><a href="#" id="logout" class="logout">Logout</a></li>
     </ul>
   </nav>
   <marquee> Welcome to the VIGNAN'S INSTITUTE OF INFORMATION TECHNOLOGY College Complaint Portal!</marquee>
@@ -210,5 +273,16 @@
       <li><a href="terms.html">Terms of Service</a></li>
     </ul>
   </footer>
+
+  <script>
+    // JavaScript for logout functionality
+    document.getElementById('logout').addEventListener('click', function(event) {
+      event.preventDefault(); // Prevent default link behavior
+      // Close the current window (if it's a popup or a new tab)
+      window.close();
+      // Redirect to the home page (you can replace "index.html" with the actual home page URL)
+      window.location.href = 'main.html';
+    });
+  </script>
 </body>
 </html>
