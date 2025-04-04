@@ -66,12 +66,12 @@
     }
 
     .nav-links .logout {
-      background-color: #e74c3c; /* Red color for logout */
+      background-color: #e74c3c;
       color: white;
     }
 
     .nav-links .logout:hover {
-      background-color: #c0392b; /* Darker red for hover */
+      background-color: #c0392b;
     }
 
     /* Hamburger Menu */
@@ -114,6 +114,52 @@
     .btn-main:hover {
       background-color: #ff9900;
       transform: scale(1.1);
+    }
+
+    /* Services Section */
+    .services {
+      display: flex;
+      justify-content: center;
+      gap: 2em;
+      padding: 4em 0;
+      flex-wrap: wrap;
+    }
+
+    .service-card {
+      text-align: center;
+      width: 22%;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2em;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin: 1em 0;
+      text-decoration: none;
+      color: white;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    .service-card h3 {
+      color: #ffcc00;
+      margin-bottom: 1em;
+    }
+
+    .service-card img {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1em;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      text-align: center;
+      padding: 1em 0;
     }
 
     /* Mobile view styles */
@@ -196,7 +242,6 @@
       <li><a href="sug.html">Suggestions</a></li>
       <li><a href="dis.html">Check Status</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <!-- Logout Option -->
       <li><a href="#" id="logout" class="logout">Logout</a></li>
     </ul>
   </nav>
@@ -208,7 +253,31 @@
   <section class="main-banner">
     <h1>Welcome to the College Complaint Portal</h1>
     <p>Your voice matters. Report issues, track progress, and help us improve.</p>
-    <a href="cc.html" class="btn-main">File a Complaint</a>
+    <a href="c.html" class="btn-main">File a Complaint</a>
+  </section>
+
+  <!-- Our Services Section -->
+  <section class="services">
+    <a href="c.html" class="service-card">
+      <img src="https://img.icons8.com/color/96/000000/commercial.png" alt="File a Complaint">
+      <h3>File a Complaint</h3>
+      <p>Submit your complaint easily and securely.</p>
+    </a>
+    <a href="display.html" class="service-card">
+      <img src="https://img.icons8.com/color/96/000000/computer.png" alt="Track Status">
+      <h3>Track Complaint Status</h3>
+      <p>Get updates on the progress of your complaints.</p>
+    </a>
+    <a href="contact.html" class="service-card">
+      <img src="https://img.icons8.com/color/96/000000/help.png" alt="Contact Support">
+      <h3>Contact Support</h3>
+      <p>Reach out to us for any assistance.</p>
+    </a>
+    <a href="sug.html" class="service-card">
+      <img src="https://img.icons8.com/color/96/000000/idea.png" alt="Suggestions">
+      <h3>Suggestions</h3>
+      <p>Share your ideas to help us improve.</p>
+    </a>
   </section>
 
   <!-- Footer Section -->
@@ -221,7 +290,7 @@
   </footer>
 
   <script>
-    // JavaScript for hamburger menu functionality
+    // Hamburger Menu Functionality
     const hamburgerMenu = document.getElementById('hamburger-menu');
     const navLinks = document.getElementById('nav-links');
 
@@ -229,12 +298,10 @@
       navLinks.classList.toggle('active');
     });
 
-    // JavaScript for logout functionality
+    // Logout Functionality
     document.getElementById('logout').addEventListener('click', function(event) {
-      event.preventDefault(); // Prevent default link behavior
-      // Close the current window (if it's a popup or a new tab)
+      event.preventDefault();
       window.close();
-      // Redirect to the login page
       window.location.href = 'main.html';
     });
   </script>
