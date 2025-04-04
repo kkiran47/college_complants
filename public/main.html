@@ -153,6 +153,7 @@
             }
         }
 
+        /* Popup Modal Styling */
         .modal {
             display: none;
             position: fixed;
@@ -163,16 +164,22 @@
             background-color: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
+            z-index: 9999;
+            animation: fadeIn 0.5s ease-in-out;
         }
 
         .modal-content {
-            background: #f44336;
+            background: linear-gradient(to top right, #ff7f50, #ff1493); /* Colorful gradient */
             padding: 30px;
             border-radius: 10px;
             color: white;
             font-size: 18px;
             text-align: center;
             max-width: 400px;
+            width: 80%;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            transform: scale(0.8);
+            animation: scaleUp 0.5s ease-in-out forwards;
         }
 
         .modal-content button {
@@ -184,10 +191,30 @@
             border-radius: 25px;
             cursor: pointer;
             margin-top: 20px;
+            transition: background 0.3s ease;
         }
 
         .modal-content button:hover {
             background: #e64a19;
+        }
+
+        /* Animation for the modal */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.8);
+            }
+            to {
+                transform: scale(1);
+            }
         }
     </style>
 </head>
@@ -250,9 +277,12 @@
                     const newComplaintsCount = data.newComplaints.length;
 
                     if (newComplaintsCount > 0) {
-                        alert(`You have ${newComplaintsCount} new complaint(s)!`);
+                        document.getElementById('alert-message').textContent = `You have ${newComplaintsCount} new complaint(s)!`;
+                        document.getElementById('alert-modal').style.display = 'flex';
+                    } else {
+                        // If no new complaints, directly redirect
+                        window.location.href = 'index.html';
                     }
-                    window.location.href = 'index.html';
                 } else {
                     const alertMessage = data.message || "Invalid login attempt. Please check your credentials.";
                     document.getElementById('alert-message').textContent = alertMessage;
@@ -267,6 +297,7 @@
 
         function closeAlert() {
             document.getElementById('alert-modal').style.display = 'none';
+            window.location.href = 'index.html';  // Redirect to index.html after closing the popup
         }
     </script>
 </body>
