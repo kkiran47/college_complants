@@ -15,6 +15,15 @@
             align-items: center;
             transition: background-color 0.5s ease;
         }
+        .complaint.cleared {
+    background-color: #e8f5e9; /* light green */
+    border-left: 6px solid #4caf50;
+}
+
+.complaint.uncleared {
+    background-color: #ffebee; /* light red */
+    border-left: 6px solid #f44336;
+}
 
         h1 {
             text-align: center;
@@ -267,7 +276,8 @@
 
                 data.forEach(complaint => {
                     const complaintDiv = document.createElement('div');
-                    complaintDiv.classList.add('complaint');
+                    complaintDiv.classList.add('complaint', complaint.status === 'cleared' ? 'cleared' : 'uncleared');
+
                     const statusClass = complaint.status === 'cleared' ? 'cleared' : 'uncleared';
 
                     complaintDiv.innerHTML = `
