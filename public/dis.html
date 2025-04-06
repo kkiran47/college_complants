@@ -249,7 +249,7 @@
         </div>
     </div>
     <script>
-        fetch('http://localhost:4348/fetch-complaints')
+        fetch('https://college-complants-1.onrender.com/fetch-complaints')
             .then(response => response.json())  // Parse the response as JSON
             .then(data => {
                 console.log('Fetched Complaints:', data);  // Log the data to inspect its structure
@@ -303,7 +303,7 @@
                 unclearedContainer.innerHTML = `<div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">Failed to load complaints. Please try again later.</div>`;
             });
 
-        fetch('http://localhost:4348/fetch-suggestions')
+        fetch('https://college-complants-1.onrender.com/fetch-suggestions')
             .then(response => response.json())
             .then(data => {
                 console.log('Fetched Suggestions:', data);  // Log the data to inspect its structure
