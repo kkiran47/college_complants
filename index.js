@@ -15,7 +15,9 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
-app.use(cors());
+app.use(cors({
+  origin: 'https://college-complants.vercel.app'
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.json());
