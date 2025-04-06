@@ -6,7 +6,7 @@
       "destination": "https://college-complants-1.onrender.com/$1"  },
     {
       "source": "/(.*)",
-      "destination": "/main.html"
+      "destination": "/index.html"
     }
   ]
 }
