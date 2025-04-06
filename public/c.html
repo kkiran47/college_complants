@@ -1,12 +1,13 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>College Complaint Portal</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+  <title>College Complaint Portal</title>
     <style>
-            nav {
+                nav {
             background: rgba(29, 53, 87, 0.9);
             color: white;
             width: 100%;
@@ -40,67 +41,108 @@
             background: rgba(255, 255, 255, 0.2);
         }
     </style>
+  <script>
+    function submitComplaint(event) {
+      event.preventDefault();  // Prevent default form submission
+
+      const form = document.getElementById('complaintForm');
+      
+      // Collect the form data into an object
+      const formData = {
+        sname: document.getElementById('sname').value,
+        email: document.getElementById('email').value,
+        category: document.getElementById('category').value,
+        description: document.getElementById('description').value
+      };
+
+      // Log the form data for debugging purposes
+      console.log(formData);
+
+      // Send the form data as JSON to the backend
+      fetch('https://college-complants-1.onrender.com/handleform', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',  // Ensure the backend knows we're sending JSON
+        },
+        body: JSON.stringify(formData)  // Send the data as JSON
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Hide form, show success message
+          form.style.display = 'none';
+          document.getElementById('successMessage').style.display = 'block';
+          form.reset();  // Clear form fields
+        } else {
+          alert('Error submitting your complaint: ' + data.message);  // Show error message from backend
+        }
+      })
+      .catch(error => {
+        console.error('Network error:', error);
+        alert('There was a network issue. Please check your connection and try again.');
+      });
+    }
+  </script>
 </head>
 <body style="font-family: Arial, sans-serif; background-image: linear-gradient(to right, #e4afcb 0%, #b8cbb8 0%, #b8cbb8 0%, #e2c58b 30%, #c2ce9c 64%, #7edbdc 100%); padding: 20px; color: #333;">
-         <nav>
+    <nav>
         <ul>
             <li><a href="home.html">Home</a></li>
             <li><a href="c.html">File a Complaint</a></li>
             <li><a href="sug.html">Suggestions</a></li>
-        </ul>
-    </nav>
+        </ul> 
+      </nav>
     <div style="max-width: 900px; margin: 0 auto; background: linear-gradient(135deg, #FFD3A5, #FD6585); border-radius: 25px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); padding: 20px; border: 4px solid burlywood;">
-        <!-- Header -->
-        <header style="text-align: center; margin-bottom: 30px; display: flex; justify-content: center; align-items: center; gap: 10px;">
-            <img src="https://www.static-contents.youth4work.com/university/Documents/Colleges/collegeLogo/418791.JPG?v=20161103190851" alt="College Logo" style="width: 90px; height: 80px; border-radius: 17px; border: 5px double rgb(209, 42, 13);">
-            <h1 style="font-size: 30px; color:#3498db; font-family: Verdana, Geneva, Tahoma, sans-serif;"><b>College Complaint Portal</b></h1>
-        </header>
-        
-        <!-- Complaint Submission Form -->
-        <div style="background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%); padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);">
-            <h2 style="font-size: 20px; margin-bottom: 20px; color: #2c3e50;">Submit Your Complaint</h2>
-            <form action="/handleform" method="post" enctype="multipart/form-data">
-                <!-- Name Input -->
-                <label for="name" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Your Name</label>
-                <input type="text" id="sname" name="sname" placeholder="Enter your name" required style="width: 96%; padding: 15px; font-size: 16px; margin-bottom: 20px; border-radius: 4px; border: 2px solid #bdc3c7;">
 
-                <!-- Email Input -->
-                <label for="email" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Your Email</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email" required style="width: 96%; padding: 15px; font-size: 16px; margin-bottom: 20px; border-radius: 4px; border: 2px solid #bdc3c7;">
+    <!-- Header -->
+    <header style="text-align: center; margin-bottom: 30px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+      <img src="https://www.static-contents.youth4work.com/university/Documents/Colleges/collegeLogo/418791.JPG?v=20161103190851" alt="College Logo" style="width: 90px; height: 80px; border-radius: 17px; border: 5px double rgb(209, 42, 13);">
+      <h1 style="font-size: 30px; color:#3498db; font-family: Verdana, Geneva, Tahoma, sans-serif;"><b>College Complaint Portal</b></h1>
+    </header>
 
-                <!-- Complaint Category -->
-                <label for="category" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Complaint Category</label>
-                <select id="category" name="category" required style="width: 100%; padding: 15px; font-size: 16px; margin-bottom: 20px; border-radius: 4px; border: 2px solid #bdc3c7;">
-                    <option value="" disabled selected>Select a category</option>
-                    <option value="Facilities">Facilities</option>
-                    <option value="Faculty">Faculty</option>
-                    <option value="Hostel">Hostel</option>
-                    <option value="Administration">Administration</option>
-                    <option value="Other">Other</option>
-                </select>
+    <!-- Complaint Form -->
+    <div style="background-image: linear-gradient(to top, #c1dfc4 0%, #deecdd 100%); padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);">
+      <h2 style="font-size: 20px; margin-bottom: 20px; color: #2c3e50;">Submit Your Complaint</h2>
+      <form id="complaintForm" onsubmit="submitComplaint(event)" method="post">
+        <!-- Name -->
+        <label for="sname" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Your Name</label>
+        <input type="text" id="sname" name="sname" placeholder="Enter your name" required style="width: 96%; padding: 15px; font-size: 16px; margin-bottom: 20px; border-radius: 4px; border: 2px solid #bdc3c7;">
 
-                <!-- Complaint Description -->
-                <label for="description" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Complaint Description</label>
-                <textarea id="description" name="description" placeholder="Describe the issue..." required style="width: 97%; padding: 15px; font-size: 16px; margin-bottom: 20px; height: 150px; resize: vertical; border-radius: 4px; border: 2px solid #bdc3c7;"></textarea>
+        <!-- Email -->
+        <label for="email" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Your Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required style="width: 96%; padding: 15px; font-size: 16px; margin-bottom: 20px; border-radius: 4px; border: 2px solid #bdc3c7;">
 
-                <!-- File Upload (Optional) -->
-                <label for="filepath" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Upload File (Optional)</label>
-                <input type="file" id="filepath" name="filepath" accept="image/*" style="width: 97%; padding: 10px; font-size: 16px; margin-bottom: 20px; border-radius: 4px; border: 1px solid #bdc3c7;">
+        <!-- Category -->
+        <label for="category" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Complaint Category</label>
+        <select id="category" name="category" required style="width: 100%; padding: 15px; font-size: 16px; margin-bottom: 20px; border-radius: 4px; border: 2px solid #bdc3c7;">
+          <option value="" disabled selected>Select a category</option>
+          <option value="Facilities">Facilities</option>
+          <option value="Faculty">Faculty</option>
+          <option value="Hostel">Hostel</option>
+          <option value="Administration">Administration</option>
+          <option value="Other">Other</option>
+        </select>
 
-                <button type="submit" style="width: 100%; padding: 15px; background-color: #3498db; border: none; color: white; font-size: 18px; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease;">
-                    Submit Complaint
-                </button>
-            </form>
-        </div>
+        <!-- Description -->
+        <label for="description" style="display: block; font-size: 16px; color: #34495e; margin-bottom: 8px;">Complaint Description</label>
+        <textarea id="description" name="description" placeholder="Describe the issue..." required style="width: 97%; padding: 15px; font-size: 16px; margin-bottom: 20px; height: 150px; resize: vertical; border-radius: 4px; border: 2px solid #bdc3c7;"></textarea>
 
-        <!-- Success Message -->
-        <div id="successMessage" style="display: none; background: linear-gradient(135deg, #2ECC71, #27AE60); color: white; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
-            <h2 style="font-size: 28px; margin-bottom: 10px;">Thank you for your submission!</h2>
-            <p style="font-size: 16px;">Your complaint has been submitted successfully. We will look into it shortly.</p>
-        </div>
+        <!-- Submit Button -->
+        <button type="submit" style="width: 100%; padding: 15px; background-color: #3498db; border: none; color: white; font-size: 18px; cursor: pointer; border-radius: 4px; transition: background-color 0.3s ease;">
+          Submit Complaint
+        </button>
+      </form>
     </div>
-    <footer style="text-align: center; margin-top: 30px; color: #7f8c8d;">
-        <p>&copy; 2025 College Complaint Portal. All rights reserved.</p>
-    </footer>
+
+    <!-- Success Message -->
+    <div id="successMessage" style="display: none; background: linear-gradient(135deg, #2ECC71, #27AE60); color: white; padding: 20px; border-radius: 8px; text-align: center; margin-top: 30px;">
+      <h2 style="font-size: 28px; margin-bottom: 10px;">Thank you for your submission!</h2>
+      <p style="font-size: 16px;">Your complaint has been submitted successfully. We will look into it shortly.</p>
+    </div>
+  </div>
+
+  <footer style="text-align: center; margin-top: 30px; color: #7f8c8d;">
+    <p>&copy; 2025 College Complaint Portal. All rights reserved.</p>
+  </footer>
 </body>
 </html>
