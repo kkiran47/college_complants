@@ -218,7 +218,7 @@
     <nav class="navbar">
         <img src="https://vignaniit.edu.in/images/09%20copy-1.jpg" alt="Logo">
         <ul>
-            <li><a href="main.html">Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="about.html">About</a></li>
             <li><a href="con.html">Contact</a></li>
         </ul>
@@ -279,7 +279,7 @@
                         document.getElementById('alert-modal').style.display = 'flex';
                         shouldRedirect = true;
                     } else {
-                        window.location.href = 'index.html';
+                        window.location.href = 'main.html';
                     }
                 } else {
                     const alertMessage = data.message || "Invalid login attempt. Please check your credentials.";
@@ -298,7 +298,7 @@
         function closeAlert() {
             document.getElementById('alert-modal').style.display = 'none';
             if (shouldRedirect) {
-                window.location.href = 'index.html';
+                window.location.href = 'main.html';
             }
         }
     </script>
