@@ -147,16 +147,22 @@ app.get('/fetch-suggestions', async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch suggestions" });
   }
 });
-
 app.put('/update-status', async (req, res) => {
   const { complaintId, status } = req.body;
+
   try {
+    // Get reference to the complaint document
     const complaintRef = db.collection('complaints').doc(complaintId.toString());
     const complaintDoc = await complaintRef.get();
 
-    if (!complaintDoc.exists) return res.status(404).send("Complaint not found");
+    if (!complaintDoc.exists) {
+      return res.status(404).send("Complaint not found");
+    }
+
+    // Update the complaint status
     await complaintRef.update({ status });
 
+    // If the complaint is marked as "cleared", send an email
     if (status === 'cleared') {
       const student = complaintDoc.data();
       if (student?.email && student?.sname) {
@@ -164,12 +170,15 @@ app.put('/update-status', async (req, res) => {
           from: process.env.EMAIL_USER,
           to: student.email,
           subject: 'Complaint Cleared',
-          text: `Dear ${student.sname}, your complaint has been marked as cleared.`
+          text: `Dear ${student.sname}, your complaint has been marked as cleared.`,
         }, (error) => {
-          if (error) console.error("Email error:", error);
+          if (error) {
+            console.error("Email error:", error);
+          }
         });
       }
     }
+
     res.send("Status updated successfully");
   } catch (error) {
     console.error("Error updating status:", error);
