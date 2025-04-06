@@ -251,7 +251,7 @@
     });
 
     // Fetch and display complaints
-    fetch('http://localhost:4348/fetch-complaints')
+    fetch('https://college-complants-1.onrender.com/fetch-complaints')
       .then(res => res.json())
       .then(data => {
         const complaintsArray = data.complaints || data; // handles both { complaints: [...] } or just [...]
@@ -279,7 +279,7 @@
             const newStatus = e.target.value;
 
             try {
-              const response = await fetch('http://localhost:4348/update-status', {
+              const response = await fetch('https://college-complants-1.onrender.com/update-status', {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json'
