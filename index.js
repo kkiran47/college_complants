@@ -9,9 +9,11 @@ const firebase = require('firebase-admin');
 const app = express();
 
 const serviceAccount = require('./serviceAccountKey.json');
-firebase.initializeApp({
-  credential: firebase.credential.cert(serviceAccount)
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(),
+  projectId: 'complaint-portal-b7394',  
 });
+
 const db = firebase.firestore();
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
