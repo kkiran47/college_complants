@@ -75,7 +75,7 @@ app.post('/admin-login', async (req, res) => {
   }
 });
 app.post('/handleform', async (req, res) => {
-  const { category, description, sname, email } = req.body;  // No filepath now
+  const { category, description, sname, email } = req.body;  // Extract the data from the request body
   const timestamp = firebase.firestore.Timestamp.now();
 
   // Check if all required fields are present
@@ -105,7 +105,7 @@ app.post('/handleform', async (req, res) => {
       timestamp
     });
 
-    res.json({ success: true });
+    res.json({ success: true });  // Send success response
   } catch (err) {
     console.error("Error storing complaint:", err);
     res.status(500).json({ success: false, message: "Registration unsuccessful" });
