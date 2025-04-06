@@ -2,6 +2,10 @@
   "version": 2,
   "rewrites": [
     {
+      "source": "/(.*)",  // Route all requests to your Render API (including frontend)
+      "destination": "https://college-complants-1.onrender.com/$1"  // Your Render API URL
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
