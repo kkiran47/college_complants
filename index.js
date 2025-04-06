@@ -9,8 +9,8 @@ const firebase = require('firebase-admin');
 const app = express();
 
 const serviceAccount = require('./serviceAccountKey.json');
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
+firebase.initializeApp({
+  credential: firebase.credential.applicationDefault(),
   projectId: 'complaint-portal-b7394',  
 });
 
