@@ -75,37 +75,43 @@ app.post('/admin-login', async (req, res) => {
   }
 });
 app.post('/handleform', async (req, res) => {
-    const { category, description, sname, email, filepath } = req.body;
-    const timestamp = firebase.firestore.Timestamp.now();
-  
-    try {
-      const counterDocRef = db.collection('counters').doc('complaintId');
-      const counterDoc = await counterDocRef.get();
-  
-      if (!counterDoc.exists) await counterDocRef.set({ counter: 1001 });
-      const currentCounter = counterDoc.data().counter;
-  
-      const complaintId = currentCounter;
-      await counterDocRef.update({ counter: currentCounter + 1 });
-  
-      await db.collection('complaints').doc(complaintId.toString()).set({
-        complaintId,
-        category,
-        description,
-        filepath: filepath || null,
-        sname,
-        email,
-        status: 'uncleared',
-        timestamp
-      });
-  
-      res.json({ success: true });
-    } catch (err) {
-      console.error("Error storing complaint:", err);
-      res.status(500).json({ success: false, message: "Registration unsuccessful" });
-    }
-  });
-  
+  const { category, description, sname, email } = req.body;  // No filepath now
+  const timestamp = firebase.firestore.Timestamp.now();
+
+  // Check if all required fields are present
+  if (!category || !description || !sname || !email) {
+    return res.status(400).json({ success: false, message: 'All fields are required.' });
+  }
+
+  try {
+    const counterDocRef = db.collection('counters').doc('complaintId');
+    const counterDoc = await counterDocRef.get();
+
+    // Initialize counter if it doesn't exist
+    if (!counterDoc.exists) await counterDocRef.set({ counter: 1001 });
+    const currentCounter = counterDoc.data().counter;
+
+    const complaintId = currentCounter;
+    await counterDocRef.update({ counter: currentCounter + 1 });
+
+    // Save complaint data to Firestore
+    await db.collection('complaints').doc(complaintId.toString()).set({
+      complaintId,
+      category,
+      description,
+      sname,
+      email,
+      status: 'uncleared',
+      timestamp
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error storing complaint:", err);
+    res.status(500).json({ success: false, message: "Registration unsuccessful" });
+  }
+});
+
 app.post('/suggestform', upload.none(), async (req, res) => {
   const { name, suggestcol } = req.body;
   if (!name || !suggestcol) {
