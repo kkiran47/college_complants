@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/(.*)", 
-      "destination": "https://college-complants-1.onrender.com/$1"  
+      "destination": "https://college-complants-1.onrender.com/$1"  },
     {
       "source": "/(.*)",
       "destination": "/index.html"
