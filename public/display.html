@@ -187,7 +187,7 @@
             color: #333;
             font-size: 1rem;
         }
-     nav {
+         nav {
             background: rgba(29, 53, 87, 0.9);
             color: white;
             width: 100%;
@@ -223,13 +223,13 @@
     </style>
 </head>
 <body>
-         <nav>
+ <nav>
         <ul>
             <li><a href="index.html">Home</a></li>
             <li><a href="cc.html">File a Complaint</a></li>
             <li><a href="suggest.html">Suggestions</a></li>
-        </ul>
-    </nav>
+        </ul> 
+      </nav>
     <div class="container">
         <h1>Complaints</h1>
         <div class="complaints-columns">
@@ -248,51 +248,52 @@
             <!-- Suggestions will be dynamically populated here -->
         </div>
     </div>
-
     <script>
-        // Fetch complaints and separate them into cleared and uncleared categories
-        fetch('/fetch-complaints')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch complaints. Status: ${response.status}`);
-                }
-                return response.json();
-            })
+        fetch('http://localhost:4348/fetch-complaints')
+            .then(response => response.json())  // Parse the response as JSON
             .then(data => {
-                const clearedContainer = document.getElementById('cleared-complaints');
-                const unclearedContainer = document.getElementById('uncleared-complaints');
+                console.log('Fetched Complaints:', data);  // Log the data to inspect its structure
 
-                clearedContainer.innerHTML = '';
-                unclearedContainer.innerHTML = '';
+                // Check if the 'complaints' property exists and is an array
+                if (Array.isArray(data.complaints)) {
+                    const clearedContainer = document.getElementById('cleared-complaints');
+                    const unclearedContainer = document.getElementById('uncleared-complaints');
 
-                data.forEach(complaint => {
-                    const complaintDiv = document.createElement('div');
-                    complaintDiv.classList.add('complaint');
-                    const statusClass = complaint.status === 'cleared' ? 'cleared' : 'uncleared';
+                    clearedContainer.innerHTML = '';
+                    unclearedContainer.innerHTML = '';
 
-                    complaintDiv.innerHTML = `
-                        <div class="header">Category: ${complaint.category}</div>
-                        <div>Description: ${complaint.description}</div>
-                        <div class="status ${statusClass}">Status: ${complaint.status}</div>
-                        <div>
-                            File: ${
-                                complaint.filepath
-                                ? `<a href="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" target="_blank">
-                                        <img src="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" 
-                                             alt="Complaint Image" 
-                                             onerror="this.src='/path-to-placeholder-image.jpg'; this.alt='Image not found';">
-                                   </a>`
-                                : 'No File'
-                            }
-                        </div>
-                    `;
+                    data.complaints.forEach(complaint => {
+                        const complaintDiv = document.createElement('div');
+                        complaintDiv.classList.add('complaint');
+                        const statusClass = complaint.status === 'cleared' ? 'cleared' : 'uncleared';
 
-                    if (complaint.status === 'cleared') {
-                        clearedContainer.appendChild(complaintDiv);
-                    } else {
-                        unclearedContainer.appendChild(complaintDiv);
-                    }
-                });
+                        complaintDiv.innerHTML = `
+                            <div class="header">Complaint ID: ${complaint.complaintId || 'N/A'}</div>
+                            <div class="header">Category: ${complaint.category}</div>
+                            <div>Description: ${complaint.description}</div>
+                            <div class="status ${statusClass}">Status: ${complaint.status}</div>
+                            <div>
+                                File: ${
+                                    complaint.filepath
+                                    ? `<a href="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" target="_blank">
+                                            <img src="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" 
+                                                 alt="Complaint Image" 
+                                                 onerror="this.src='/path-to-placeholder-image.jpg'; this.alt='Image not found';">
+                                       </a>`
+                                    : 'No File'
+                                }
+                            </div>
+                        `;
+
+                        if (complaint.status === 'cleared') {
+                            clearedContainer.appendChild(complaintDiv);
+                        } else {
+                            unclearedContainer.appendChild(complaintDiv);
+                        }
+                    });
+                } else {
+                    console.error('Fetched complaints is not an array:', data.complaints);  // Log an error if the data isn't an array
+                }
             })
             .catch(error => {
                 console.error('Error fetching complaints:', error);
@@ -302,35 +303,33 @@
                 unclearedContainer.innerHTML = `<div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">Failed to load complaints. Please try again later.</div>`;
             });
 
-        // Fetch suggestions and populate them
-        fetch('/fetch-suggestions')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Failed to fetch suggestions. Status: ${response.status}`);
-                }
-                return response.json();
-            })
+        fetch('http://localhost:4348/fetch-suggestions')
+            .then(response => response.json())
             .then(data => {
-                const suggestionsContainer = document.getElementById('suggestions-container');
-                suggestionsContainer.innerHTML = "";
-                data.forEach(suggestion => {
-                    const suggestionDiv = document.createElement('div');
-                    suggestionDiv.classList.add('suggestion');
-                    suggestionDiv.innerHTML = `
-                        <div class="header">Name: ${suggestion.name}</div>
-                        <p>Suggestion: ${suggestion.suggestcol}</p>
-                    `;
-                    suggestionsContainer.appendChild(suggestionDiv);
-                });
+                console.log('Fetched Suggestions:', data);  // Log the data to inspect its structure
+
+                // Check if the 'suggestions' property exists and is an array
+                if (Array.isArray(data.suggestions)) {
+                    const suggestionsContainer = document.getElementById('suggestions-container');
+                    suggestionsContainer.innerHTML = "";
+
+                    data.suggestions.forEach(suggestion => {
+                        const suggestionDiv = document.createElement('div');
+                        suggestionDiv.classList.add('suggestion');
+                        suggestionDiv.innerHTML = `
+                            <div class="header">Name: ${suggestion.name}</div>
+                            <p>Suggestion: ${suggestion.suggestcol}</p>
+                        `;
+                        suggestionsContainer.appendChild(suggestionDiv);
+                    });
+                } else {
+                    console.error('Fetched suggestions is not an array:', data.suggestions);  // Log an error if the data isn't an array
+                }
             })
             .catch(error => {
                 console.error('Error fetching suggestions:', error);
                 const suggestionsContainer = document.getElementById('suggestions-container');
-                suggestionsContainer.innerHTML = `
-                    <div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">
-                        Failed to load suggestions. Please try again later.
-                    </div>
-                `;
+                suggestionsContainer.innerHTML = `<div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">Failed to load suggestions. Please try again later.</div>`;
             });
     </script>
 </body>
