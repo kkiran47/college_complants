@@ -44,11 +44,11 @@
     }
 
     .logo img {
-      width: 320px;
+      width: 200px; /* Adjusted logo size */
       border-radius: 10px;
       transition: transform 0.3s ease-in-out;
       border: 5px solid #008793;
-      height: 85px;
+      height: 60px; /* Adjusted height */
     }
 
     .logo img:hover {
@@ -114,6 +114,16 @@
 
       .hamburger {
         display: block;
+      }
+
+      .logo img {
+        width: 150px; /* Smaller logo for mobile */
+        height: 50px; /* Smaller logo for mobile */
+      }
+
+      /* Reduced heading size on smaller screens */
+      nav p {
+        font-size: 18px; /* Further reduced font size for mobile */
       }
     }
 
@@ -220,7 +230,7 @@
     <div class="logo">
       <img src="https://mec.edu.in/storage/2021/11/vignans.png" alt="College Logo">
     </div>
-    <p style="font-size: 30px; font-weight: bold; color: #ffcc00; margin: 0;">COLLEGE COMPLAINT PORTAL</p>
+    <p style="font-size: 18px; font-weight: bold; color: #ffcc00; margin: 0;">COLLEGE COMPLAINT PORTAL</p> <!-- Reduced heading size -->
     <button class="hamburger" onclick="toggleMenu()">☰</button>
     <ul class="nav-links" id="navLinks">
       <li><a href="main.html">Home</a></li>
