@@ -1,95 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You</title>
-    <style>
-        @keyframes fadeInZoom {
-            0% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
 
-        body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-image: linear-gradient(-225deg, #FF057C 0%, #8D0B93 50%, #321575 100%);
-            color: #fff;
-        }
+    .thank-box {
+      background: #ffffff;
+      color: #333;
+      padding: 3em 2em;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      animation: popIn 0.5s ease;
+      max-width: 500px;
+      width: 90%;
+    }
 
-        h1 {
-            font-size: 50px;
-            font-family: 'Georgia', serif;
-            color: #fff;
-            background-color: #4CAF50;
-            display: inline-block;
-            padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.3);
-            animation: fadeInZoom 1.2s ease-in-out;
-            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.8);
-        }
+    .thank-box h1 {
+      color: #28a745;
+      margin-bottom: 0.5em;
+    }
 
-        p {
-            font-size: 18px;
-            color: #fff;
-            margin-top: 20px;
-            opacity: 0;
-            animation: fadeInZoom 1.5s ease-in-out 0.5s forwards;
-        }
-        nav {
-            background: rgba(29, 53, 87, 0.9);
-            color: white;
-            width: 100%;
-            text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index:10;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-            animation: slideIn 1s ease-out;
-        }
+    .thank-box p {
+      font-size: 1.1em;
+      line-height: 1.6;
+    }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
+    @keyframes popIn {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
 
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 8px 15px;
-            transition: all 0.3s;
-            border-radius: 5px;
-        }
+    .back-btn {
+      margin-top: 2em;
+      padding: 0.7em 1.5em;
+      font-size: 1em;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
 
-        nav ul li a:hover {
-            color: #ffd700;
-            background: rgba(255, 255, 255, 0.2);
-        }
-    </style>
+    .back-btn:hover {
+      background: linear-gradient(to right, #0072ff, #005fcc);
+      transform: translateY(-2px);
+    }
+  </style>
 </head>
 <body>
-     <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="cc.html">File a Complaint</a></li>
-            <li><a href="suggest.html">Suggestions</a></li>
-        </ul>
-    </nav>
-    <br><br><br><br><br><br>
+  <div class="thank-box">
     <h1>Thank You!</h1>
     <p>Your suggestion has been submitted successfully.</p>
     <p>We appreciate your feedback and will look into your concerns promptly.</p>
+    <button class="back-btn" onclick="window.location.href='main.html'">Back to Home</button>
+  </div>
 </body>
 </html>
