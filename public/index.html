@@ -1,306 +1,398 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to right, #43e97b, #38f9d7);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Page</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #43e97b, #38f9d7);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .navbar {
-            width: 100%;
-            background: #2c3e50;
-            padding: 15px 0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-        }
+    .navbar {
+      width: 100%;
+      background: #2c3e50;
+      padding: 15px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+    }
 
-        .navbar img {
-            height: 60px;
-            margin-left: 20px;
-            width: 700px;
-            border-radius: 10px;
-        }
+    .navbar img {
+      height: 60px;
+      margin-left: 20px;
+      width: 700px;
+      border-radius: 10px;
+    }
 
-        .navbar ul {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-        }
+    .menu-toggle {
+      display: none;
+      font-size: 28px;
+      color: white;
+      margin-right: 20px;
+      cursor: pointer;
+    }
 
-        .navbar ul li {
-            margin: 0 15px;
-        }
+    .navbar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
 
-        .navbar ul li a {
-            color: white;
-            text-decoration: none;
-            font-size: 18px;
-            transition: color 0.3s ease;
-        }
+    .navbar ul li {
+      margin: 0 15px;
+    }
 
-        .navbar ul li a:hover {
-            color: #66bb6a;
-        }
+    .navbar ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      transition: color 0.3s ease;
+    }
 
-        .container {
-            margin-top: 80px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    .navbar ul li a:hover {
+      color: #66bb6a;
+    }
 
-        .login-box {
-            display: flex;
-            justify-content: space-around;
-            width: 80%;
-            max-width: 800px;
-            padding: 30px;
-            background: aquamarine;
-            border-radius: 20px;
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-        }
+    .container {
+      margin-top: 80px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .section {
-            width: 45%;
-            background: linear-gradient(to top left, #32a852, #17c1b3);
-            border-radius: 15px;
-            color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
+    .login-box {
+      display: flex;
+      justify-content: space-around;
+      width: 80%;
+      max-width: 800px;
+      padding: 30px;
+      background: aquamarine;
+      border-radius: 20px;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
 
-        .section:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
+    .section {
+      width: 45%;
+      background: linear-gradient(to top left, #32a852, #17c1b3);
+      border-radius: 15px;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
 
-        .section h3 {
-            font-size: 2rem;
-            margin-bottom: 20px;
-            color: white;
-        }
+    .section:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
 
-        .student-btn, .login-btn {
-            background: green;
-            color: white;
-            padding: 12px 30px;
-            font-size: 20px;
-            border-radius: 25px;
-            border: none;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin: 20px 0;
-            width: 80%;
-        }
+    .section h3 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: white;
+    }
 
-        .student-btn:hover, .login-btn:hover {
-            background: #4caf50;
-            transform: translateY(-5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        }
+    .student-btn, .login-btn {
+      background: green;
+      color: white;
+      padding: 12px 30px;
+      font-size: 20px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 20px 0;
+      width: 80%;
+    }
 
-        .login-input {
-            padding: 12px 20px;
-            margin: 10px 0;
-            width: 80%;
-            border-radius: 30px;
-            border: 1px solid #ddd;
-            font-size: 16px;
-            outline: none;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
+    .student-btn:hover, .login-btn:hover {
+      background: #4caf50;
+      transform: translateY(-5px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
 
-        .login-input:focus {
-            border-color: #66bb6a;
-            box-shadow: 0 0 5px rgba(102, 187, 106, 0.5);
-        }
+    .login-input {
+      padding: 12px 20px;
+      margin: 10px 0;
+      width: 80%;
+      border-radius: 30px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
 
-        .login-input:hover {
-            box-shadow: 0 0 10px rgba(102, 187, 106, 0.6);
-        }
+    .login-input:focus {
+      border-color: #66bb6a;
+      box-shadow: 0 0 5px rgba(102, 187, 106, 0.5);
+    }
 
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            animation: fadeIn 0.5s ease-in-out;
-        }
+    .login-input:hover {
+      box-shadow: 0 0 10px rgba(102, 187, 106, 0.6);
+    }
 
-        .modal-content {
-            background: linear-gradient(to top right, #ff7f50, #ff1493);
-            padding: 30px;
-            border-radius: 10px;
-            color: white;
-            font-size: 18px;
-            text-align: center;
-            max-width: 400px;
-            width: 80%;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-            transform: scale(0.8);
-            animation: scaleUp 0.5s ease-in-out forwards;
-        }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.5s ease-in-out;
+    }
 
-        .modal-content button {
-            background: #ff5722;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background 0.3s ease;
-        }
+    .modal-content {
+      background: linear-gradient(to top right, #ff7f50, #ff1493);
+      padding: 30px;
+      border-radius: 10px;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      max-width: 400px;
+      width: 80%;
+      box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+      transform: scale(0.8);
+      animation: scaleUp 0.5s ease-in-out forwards;
+    }
 
-        .modal-content button:hover {
-            background: #e64a19;
-        }
+    .modal-content button {
+      background: #ff5722;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 25px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.3s ease;
+    }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
+    .modal-content button:hover {
+      background: #e64a19;
+    }
 
-        @keyframes scaleUp {
-            from { transform: scale(0.8); }
-            to { transform: scale(1); }
-        }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
 
-        @media (max-width: 768px) {
-            .navbar img { width: 60%; margin-left: 10px; }
-            .navbar ul { flex-direction: column; text-align: center; }
-            .navbar ul li { margin: 10px 0; }
-            .login-box { flex-direction: column; width: 90%; padding: 20px; }
-            .section { width: 100%; margin-bottom: 20px; }
-            .student-btn, .login-btn { width: 100%; font-size: 18px; padding: 12px 0; }
-            .login-input { width: 100%; font-size: 18px; padding: 15px; }
-            .modal-content { width: 90%; max-width: 350px; }
-        }
+    @keyframes scaleUp {
+      from { transform: scale(0.8); }
+      to { transform: scale(1); }
+    }
 
-        @media (max-width: 480px) {
-            .navbar img { width: 80%; height: auto; }
-            .modal-content { width: 90%; }
-        }
-    </style>
+    .spinner {
+      margin: 20px auto;
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .navbar img {
+        width: 60%;
+        margin-left: 10px;
+      }
+
+      .menu-toggle {
+        display: block;
+      }
+
+      .navbar ul {
+        display: none;
+        flex-direction: column;
+        background-color: #2c3e50;
+        position: absolute;
+        top: 80px;
+        right: 0;
+        width: 100%;
+        padding: 10px 0;
+      }
+
+      .navbar ul.show {
+        display: flex;
+      }
+
+      .navbar ul li {
+        margin: 10px 0;
+      }
+
+      .login-box {
+        flex-direction: column;
+        width: 90%;
+        padding: 20px;
+      }
+
+      .section {
+        width: 100%;
+        margin-bottom: 20px;
+      }
+
+      .student-btn, .login-btn {
+        width: 100%;
+        font-size: 18px;
+        padding: 12px 0;
+      }
+
+      .login-input {
+        width: 100%;
+        font-size: 18px;
+        padding: 15px;
+      }
+
+      .modal-content {
+        width: 90%;
+        max-width: 350px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar img {
+        width: 80%;
+        height: auto;
+      }
+
+      .modal-content {
+        width: 90%;
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav class="navbar">
-        <img src="https://vignaniit.edu.in/images/09%20copy-1.jpg" alt="Logo">
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="con.html">Contact</a></li>
-        </ul>
-    </nav>
+  <nav class="navbar">
+    <img src="https://vignaniit.edu.in/images/09%20copy-1.jpg" alt="Logo">
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+    <ul id="nav-links">
+      <li><a href="index.html.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="con.html">Contact</a></li>
+    </ul>
+  </nav>
 
-    <div class="container">
-        <div class="login-box">
-            <div class="section">
-                <h3>Student</h3>
-                <button class="student-btn" onclick="redirectToStudentPage()">Go to Student Portal</button>
-            </div>
-            <div class="section">
-                <h3>Administration</h3>
-                <form id="admin-login-form">
-                    <input type="text" id="admin-username" class="login-input" placeholder="Username" required><br>
-                    <input type="password" id="admin-password" class="login-input" placeholder="Password" required><br>
-                    <button type="submit" class="login-btn">Login</button>
-                </form>
-            </div>
-        </div>
+  <div class="container">
+    <div class="login-box">
+      <div class="section">
+        <h3>Student</h3>
+        <button class="student-btn" onclick="redirectToStudentPage()">Go to Student Portal</button>
+      </div>
+      <div class="section">
+        <h3>Administration</h3>
+        <form id="admin-login-form">
+          <input type="text" id="admin-username" class="login-input" placeholder="Username" required><br>
+          <input type="password" id="admin-password" class="login-input" placeholder="Password" required><br>
+          <button type="submit" class="login-btn">Login</button>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <!-- Invalid Login / Notification Modal -->
-    <div class="modal" id="alert-modal">
-        <div class="modal-content">
-            <p id="alert-message">Invalid Username or Password.</p>
-            <button onclick="closeAlert()">Close</button>
-        </div>
+  <!-- Error/Info Modal -->
+  <div class="modal" id="alert-modal">
+    <div class="modal-content">
+      <p id="alert-message">Invalid Username or Password.</p>
+      <button onclick="closeAlert()">Close</button>
     </div>
+  </div>
 
-    <script>
-        let shouldRedirect = false;
+  <!-- Loading Modal -->
+  <div class="modal" id="loading-modal">
+    <div class="modal-content" style="background: linear-gradient(to right, #00c6ff, #0072ff);">
+      <p>Logging in... Please wait</p>
+      <div class="spinner"></div>
+    </div>
+  </div>
 
-        function redirectToStudentPage() {
-            window.location.href = "home.html";
-        }
+  <script>
+    let shouldRedirect = false;
 
-        document.getElementById('admin-login-form').addEventListener('submit', async (event) => {
-            event.preventDefault();
+    function redirectToStudentPage() {
+      window.location.href = "home.html";
+    }
 
-            const username = document.getElementById('admin-username').value;
-            const password = document.getElementById('admin-password').value;
+    function toggleMenu() {
+      const navLinks = document.getElementById('nav-links');
+      navLinks.classList.toggle('show');
+    }
 
-            try {
-                const response = await fetch('https://college-complants-1.onrender.com/admin-login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
+    document.getElementById('admin-login-form').addEventListener('submit', async (event) => {
+      event.preventDefault();
 
-                const data = await response.json();
+      const username = document.getElementById('admin-username').value;
+      const password = document.getElementById('admin-password').value;
 
-                if (data.success) {
-                    const newComplaintsCount = data.newComplaints.length;
+      document.getElementById('loading-modal').style.display = 'flex';
 
-                    if (newComplaintsCount > 0) {
-                        document.getElementById('alert-message').textContent = `You have ${newComplaintsCount} new complaint(s)!`;
-                        document.getElementById('alert-modal').style.display = 'flex';
-                        shouldRedirect = true;
-                    } else {
-                        window.location.href = 'main.html';
-                    }
-                } else {
-                    const alertMessage = data.message || "Invalid login attempt. Please check your credentials.";
-                    document.getElementById('alert-message').textContent = alertMessage;
-                    document.getElementById('alert-modal').style.display = 'flex';
-                    shouldRedirect = false;
-                }
-            } catch (err) {
-                console.error('Login error:', err);
-                document.getElementById('alert-message').textContent = "An error occurred. Please try again later.";
-                document.getElementById('alert-modal').style.display = 'flex';
-                shouldRedirect = false;
-            }
+      try {
+        const response = await fetch('https://college-complants-1.onrender.com/admin-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
         });
 
-        function closeAlert() {
-            document.getElementById('alert-modal').style.display = 'none';
-            if (shouldRedirect) {
-                window.location.href = 'main.html';
-            }
+        const data = await response.json();
+        document.getElementById('loading-modal').style.display = 'none';
+
+        if (data.success) {
+          const newComplaintsCount = data.newComplaints.length;
+
+          if (newComplaintsCount > 0) {
+            document.getElementById('alert-message').textContent = `You have ${newComplaintsCount} new complaint(s)!`;
+            document.getElementById('alert-modal').style.display = 'flex';
+            shouldRedirect = true;
+          } else {
+            window.location.href = 'index.html';
+          }
+        } else {
+          document.getElementById('alert-message').textContent = data.message || "Invalid login attempt.";
+          document.getElementById('alert-modal').style.display = 'flex';
+          shouldRedirect = false;
         }
-    </script>
+      } catch (err) {
+        console.error('Login error:', err);
+        document.getElementById('loading-modal').style.display = 'none';
+        document.getElementById('alert-message').textContent = "An error occurred. Please try again later.";
+        document.getElementById('alert-modal').style.display = 'flex';
+        shouldRedirect = false;
+      }
+    });
+
+    function closeAlert() {
+      document.getElementById('alert-modal').style.display = 'none';
+      if (shouldRedirect) {
+        window.location.href = 'index.html';
+      }
+    }
+  </script>
 </body>
 </html>
