@@ -371,7 +371,7 @@
             document.getElementById('alert-modal').style.display = 'flex';
             shouldRedirect = true;
           } else {
-            window.location.href = 'index.html';
+            window.location.href = 'main.html';
           }
         } else {
           document.getElementById('alert-message').textContent = data.message || "Invalid login attempt.";
@@ -390,7 +390,7 @@
     function closeAlert() {
       document.getElementById('alert-modal').style.display = 'none';
       if (shouldRedirect) {
-        window.location.href = 'index.html';
+        window.location.href = 'main.html';
       }
     }
   </script>
