@@ -1,37 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Suggestions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-    /* Global Styles */
-    body {
-      font-family: 'Roboto', sans-serif;
+    * {
       margin: 0;
       padding: 0;
-      line-height: 1.6;
-      background-image: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(70,232,252,1) 100%);
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
     }
 
-    /* Navigation Bar Styles */
     nav {
-      background: rgba(29, 53, 87, 0.9);
-      color: white;
-      width: 100%;
-      text-align: center;
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 10;
-      box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-      animation: slideIn 1s ease-out;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 15px;
+      text-align: center;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
 
     nav ul {
@@ -41,38 +40,32 @@
       gap: 30px;
     }
 
-    nav ul li a {
-      color: white;
+    nav a {
+      color: #fff;
       text-decoration: none;
-      font-weight: bold;
-      padding: 8px 15px;
-      transition: all 0.3s;
-      border-radius: 5px;
+      font-weight: 600;
+      transition: color 0.3s;
     }
 
-    nav ul li a:hover {
+    nav a:hover {
       color: #ffd700;
-      background: rgba(255, 255, 255, 0.2);
     }
 
-    /* Suggestions Form Section */
     .suggestions {
-      max-width: 600px;
-      width: 100%;
-      margin: 5em auto 2em;
-      padding: 2em;
-      background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+      background: #ffffff;
+      padding: 2.5em;
       border-radius: 15px;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-      animation: fadeIn 1s ease-in-out;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 600px;
+      margin-top: 80px;
+      animation: fadeInUp 0.8s ease-in-out;
     }
 
     .suggestions h2 {
       text-align: center;
-      color: #28a745;
-      margin-bottom: 1em;
-      font-size: 2em;
-      font-weight: 700;
+      color: #0072ff;
+      margin-bottom: 1.2em;
     }
 
     .form-group {
@@ -82,109 +75,123 @@
     .form-group label {
       display: block;
       margin-bottom: 0.5em;
-      font-size: 1.1em;
       font-weight: 600;
-      color: #333;
+      color: #444;
     }
 
     .form-group input,
     .form-group textarea {
       width: 100%;
       padding: 0.75em;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 1em;
-      transition: border-color 0.3s;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: #28a745;
-      outline: none;
-    }
-
-    .form-group input {
-      height: 2.5em;
-    }
-
-    .form-group textarea {
-      height: 150px;
-      resize: vertical;
     }
 
     .char-count {
       text-align: right;
-      font-size: 0.9em;
-      color: #666;
+      font-size: 0.85em;
+      color: #777;
     }
 
     .progress-bar {
-      width: 100%;
-      background-color: #f4f4f4;
+      background-color: #eee;
       border-radius: 5px;
       overflow: hidden;
-      margin-top: 0.5em;
-      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+      margin-top: 0.3em;
     }
 
     .progress-bar div {
-      height: 10px;
+      height: 8px;
       width: 0;
-      background-color: #28a745;
-      transition: width 0.3s;
+      background-color: #0072ff;
+      transition: width 0.3s ease;
     }
 
     .btn-submit {
-      display: block;
-      width: 100%;
-      background: linear-gradient(45deg, #28a745, #218838);
-      color: #fff;
-      padding: 0.75em;
-      text-align: center;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
       border: none;
-      border-radius: 10px;
-      font-size: 1.2em;
+      color: white;
+      padding: 0.75em;
+      font-size: 1.1em;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background 0.3s, transform 0.3s;
+      width: 100%;
       margin-top: 1em;
+      transition: background 0.3s, transform 0.2s;
     }
 
     .btn-submit:hover {
-      background: linear-gradient(45deg, #218838, #1e7a33);
-      transform: translateY(-3px);
+      background: linear-gradient(to right, #0072ff, #005fcc);
+      transform: translateY(-2px);
     }
 
-    .thank-you-message,
-    .error-message {
+    .popup-loader {
       display: none;
-      text-align: center;
-      margin-top: 1em;
-      font-size: 1.1em;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .popup-loader.active {
+      display: flex;
+    }
+
+    .loader-box {
+      background: #fff;
+      padding: 2em;
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: popIn 0.3s ease-in-out;
+    }
+
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 6px solid #eee;
+      border-top: 6px solid #0072ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1em;
+    }
+
+    .loader-text {
       font-weight: 600;
+      color: #444;
     }
 
-    .thank-you-message {
-      color: #28a745;
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
-    .error-message {
-      color: #d9534f;
+    @keyframes popIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
 
-    /* Animations */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    @keyframes fadeInUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
-
-    @keyframes slideIn {
-      from { transform: translateY(-100%); }
-      to { transform: translateY(0); }
-    }
-
   </style>
 </head>
 <body>
+
+  <div class="popup-loader" id="popupLoader">
+    <div class="loader-box">
+      <div class="loader"></div>
+      <div class="loader-text">Submitting your suggestion...</div>
+    </div>
+  </div>
+
   <nav>
     <ul>
       <li><a href="home.html">Home</a></li>
@@ -195,48 +202,41 @@
 
   <section class="suggestions">
     <h2>Share Your Suggestions</h2>
-    <form id="sForm" onsubmit="submitComplaint(event)" method="post" enctype="multipart/form-data">
+    <form id="sForm" onsubmit="submitSuggestion(event)">
       <div class="form-group">
-        <label for="name">Name:</label>
+        <label for="name">Your Name</label>
         <input type="text" id="name" name="name" required placeholder="Enter your name">
       </div>
       <div class="form-group">
-        <label for="suggestion">Suggestion:</label>
-        <textarea id="suggestcol" name="suggestcol" rows="6" maxlength="500" placeholder="Write your suggestion here..." required></textarea>
+        <label for="suggestcol">Suggestion</label>
+        <textarea id="suggestcol" name="suggestcol" maxlength="500" required placeholder="Write your suggestion..."></textarea>
         <div class="char-count" id="charCount">0/500</div>
         <div class="progress-bar"><div id="progressBar"></div></div>
       </div>
       <button type="submit" class="btn-submit">Submit Suggestion</button>
     </form>
-
-    <div id="thankYouMessage" class="thank-you-message">
-      Thank you for your suggestion! We appreciate your input.
-    </div>
-    <div id="errorMessage" class="error-message">
-      Please fill in all fields before submitting your suggestion.
-    </div>
   </section>
 
   <script>
-    const suggestionTextarea = document.getElementById('suggestcol');
-    const charCount = document.getElementById('charCount');
-    const progressBar = document.getElementById('progressBar');
+    const suggestionInput = document.getElementById("suggestcol");
+    const charCount = document.getElementById("charCount");
+    const progressBar = document.getElementById("progressBar");
+    const loader = document.getElementById("popupLoader");
 
-    suggestionTextarea.addEventListener('input', function() {
-      const currentLength = suggestionTextarea.value.length;
-      charCount.textContent = `${currentLength}/500`;
-      progressBar.style.width = `${(currentLength / 500) * 100}%`;
+    suggestionInput.addEventListener("input", () => {
+      const len = suggestionInput.value.length;
+      charCount.textContent = `${len}/500`;
+      progressBar.style.width = `${(len / 500) * 100}%`;
     });
 
-    function submitComplaint(event) {
-      event.preventDefault();  // Prevent default form submission
+    function submitSuggestion(event) {
+      event.preventDefault();
 
       const name = document.getElementById('name').value.trim();
       const suggestion = document.getElementById('suggestcol').value.trim();
 
-      // Validate that name and suggestion are not empty
       if (!name || !suggestion) {
-        alert("Please fill out both fields before submitting.");
+        alert("Please fill all fields before submitting.");
         return;
       }
 
@@ -245,28 +245,28 @@
         suggestcol: suggestion
       };
 
-      // Log the data
-      console.log("Form Data:", formData);
+      loader.classList.add("active");
 
-      // Make the POST request to the backend
       fetch('https://college-complants-1.onrender.com/suggestform', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json' // Send data as JSON
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData) // Stringify the JSON object
+        body: JSON.stringify(formData)
       })
       .then(response => response.json())
       .then(data => {
+        loader.classList.remove("active");
         if (data.success) {
-          window.location.href = 'thank.html'; // Redirect to thank.html
+          window.location.href = "thank.html";
         } else {
-          alert('There was an error submitting your suggestion. Please try again.');
+          alert("Something went wrong. Please try again.");
         }
       })
       .catch(error => {
-        console.error('Error:', error);
-        alert('There was an error with the network request. Please try again later.');
+        loader.classList.remove("active");
+        console.error("Error:", error);
+        alert("Network error. Please try again later.");
       });
     }
   </script>
