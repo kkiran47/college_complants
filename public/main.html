@@ -4,21 +4,34 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>College Complaint Portal</title>
-  <style>
+  <style>  
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    :root {
+      --bg-gradient: linear-gradient(120deg, #004d7a, #008793, #00bf72);
+      --text-color: white;
+      --nav-bg: rgba(0, 0, 0, 0.8);
+    }
+
+    body.light {
+      --bg-gradient: linear-gradient(120deg, #f5f5f5, #e0e0e0);
+      --text-color: black;
+      --nav-bg: rgba(255, 255, 255, 0.9);
+    }
 
     body {
       font-family: 'Roboto', sans-serif;
       margin: 0;
       padding: 0;
       line-height: 1.6;
-      background: linear-gradient(120deg, #004d7a, #008793, #00bf72);
-      color: white;
+      background: var(--bg-gradient);
+      color: var(--text-color);
+      transition: background 0.3s, color 0.3s;
     }
 
     nav {
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
+      background: var(--nav-bg);
+      color: var(--text-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -28,19 +41,6 @@
       top: 0;
       z-index: 1000;
       height: 70px;
-    }
-
-    marquee {
-      font-size: 18px;
-      font-weight: bold;
-      color: rgb(199, 44, 44);
-      background: #77bec4;
-      padding: 5px;
-      position: fixed;
-      top: 100px;
-      width: 100%;
-      z-index: 999;
-      text-align: center;
     }
 
     .logo img {
@@ -64,7 +64,7 @@
     }
 
     .nav-links a {
-      color: #fff;
+      color: var(--text-color);
       text-decoration: none;
       padding: 0.5em 1em;
       border-radius: 5px;
@@ -77,10 +77,63 @@
       transform: scale(1.1);
     }
 
+    .toggle-theme {
+      background-color: transparent;
+      border: 2px solid #ffcc00;
+      color: #ffcc00;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-left: 1em;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 28px;
+      cursor: pointer;
+      background: none;
+      color: var(--text-color);
+      border: none;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: var(--nav-bg);
+        width: 100%;
+        padding: 1em 0;
+      }
+
+      .nav-links.active {
+        display: flex;
+      }
+
+      .hamburger {
+        display: block;
+      }
+    }
+
+    marquee {
+      font-size: 18px;
+      font-weight: bold;
+      color: rgb(199, 44, 44);
+      background: #77bec4;
+      padding: 5px;
+      position: fixed;
+      top: 100px;
+      width: 100%;
+      z-index: 999;
+      text-align: center;
+    }
+
     .main-banner {
       background: url('banner.jpg') no-repeat center center/cover;
       text-align: center;
-      color: #fff;
+      color: var(--text-color);
       padding: 10em 0;
       position: relative;
       display: flex;
@@ -121,7 +174,7 @@
       transition: transform 0.3s, box-shadow 0.3s;
       margin: 1em 0;
       text-decoration: none;
-      color: white;
+      color: var(--text-color);
     }
 
     .service-card:hover {
@@ -141,71 +194,23 @@
     }
 
     footer {
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
+      background: var(--nav-bg);
+      color: var(--text-color);
       text-align: center;
       padding: 1em 0;
     }
 
-    /* Mobile View Adjustments */
-    @media (max-width: 768px) {
-      nav {
-        flex-direction: column;
-        align-items: center;
-        height: auto;
-      }
-
-      .logo img {
-        width: 250px;
-        height: 60px;
-      }
-
-      .nav-links {
-        flex-direction: column;
-        margin-top: 10px;
-        width: 100%;
-        align-items: center;
-      }
-
-      .nav-links a {
-        padding: 1em;
-        width: 100%;
-        text-align: center;
-      }
-
-      .main-banner {
-        padding: 6em 0;
-      }
-
-      .services {
-        gap: 1em;
-        flex-direction: column;
-        align-items: center;
-        padding: 2em 0;
-      }
-
-      .service-card {
-        width: 80%;
-      }
-
-      .btn-main {
-        font-size: 1em;
-      }
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      gap: 2em;
     }
 
-    /* Smaller screens */
-    @media (max-width: 480px) {
-      .service-card {
-        width: 90%;
-      }
-
-      .btn-main {
-        font-size: 1.1em;
-      }
-
-      marquee {
-        font-size: 16px;
-      }
+    .footer-links a {
+      color: var(--text-color);
+      text-decoration: none;
     }
   </style>
 </head>
@@ -216,7 +221,8 @@
       <img src="https://mec.edu.in/storage/2021/11/vignans.png" alt="College Logo">
     </div>
     <p style="font-size: 30px; font-weight: bold; color: #ffcc00; margin: 0;">COLLEGE COMPLAINT PORTAL</p>
-    <ul class="nav-links">
+    <button class="hamburger" onclick="toggleMenu()">☰</button>
+    <ul class="nav-links" id="navLinks">
       <li><a href="main.html">Home</a></li>
       <li><a href="aboutus.html">About Us</a></li>
       <li><a href="cc.html">File a Complaint</a></li>
@@ -224,10 +230,11 @@
       <li><a href="display.html">Check Status</a></li>
       <li><a href="update-status.html">Update Status</a></li>
       <li><a href="contact.html">Contact</a></li>
-      <!-- Logout Option -->
       <li><a href="#" id="logout" class="logout">Logout</a></li>
+      <li><button class="toggle-theme" onclick="toggleTheme()">Toggle Theme</button></li>
     </ul>
   </nav>
+
   <marquee> Welcome to the VIGNAN'S INSTITUTE OF INFORMATION TECHNOLOGY College Complaint Portal!</marquee>
 
   <section class="main-banner">
@@ -275,12 +282,20 @@
   </footer>
 
   <script>
-    // JavaScript for logout functionality
+    // Hamburger Toggle
+    function toggleMenu() {
+      document.getElementById('navLinks').classList.toggle('active');
+    }
+
+    // Theme Toggle
+    function toggleTheme() {
+      document.body.classList.toggle('light');
+    }
+
+    // Logout Redirect
     document.getElementById('logout').addEventListener('click', function(event) {
-      event.preventDefault(); // Prevent default link behavior
-      // Close the current window (if it's a popup or a new tab)
+      event.preventDefault();
       window.close();
-      // Redirect to the home page (you can replace "index.html" with the actual home page URL)
       window.location.href = 'main.html';
     });
   </script>
