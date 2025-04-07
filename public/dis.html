@@ -1,336 +1,345 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complaints and Suggestions</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: #e0f7fa;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: background-color 0.5s ease;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complaints and Suggestions</title>
+  <style>
+    :root {
+      --primary: #00796b;
+      --background: #e0f7fa;
+      --text: #004d40;
+      --card: #ffffff;
+    }
 
-        h1 {
-            text-align: center;
-            font-size: 3rem;
-            color: #00796b;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 50px;
-            text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-        }
+    [data-theme="dark"] {
+      --primary: #80cbc4;
+      --background: #263238;
+      --text: #ffffff;
+      --card: #37474f;
+    }
 
-        .container {
-            width: 90%;
-            max-width: 1600px;
-            padding: 20px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--background);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: var(--text);
+    }
 
-        .complaints-columns {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-            flex-wrap: wrap;
-            width: 100%;
-            margin-bottom: 50px;
-        }
+    nav {
+      width: 100%;
+      background: var(--primary);
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 25px;
+      align-items: center;
+      color: white;
+      flex-wrap: wrap;
+    }
 
-        .complaints-column {
-            flex: 1 1 45%;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-            max-height: 800px;
-            animation: slideUp 1s ease-in-out;
-        }
+    nav .logo {
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
 
-        .complaints-column h2 {
-            font-size: 1.5rem;
-            color: #00796b;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      padding: 0;
+      margin: 0;
+    }
 
-        .complaint {
-            background: #ffffff;
-            margin: 15px 0;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            height: 250px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            opacity: 0;
-            animation: fadeIn 1s forwards, bounceIn 1s ease-out;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
+    nav ul li {
+      cursor: pointer;
+    }
 
-        .complaint:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
+    .theme-toggle {
+      cursor: pointer;
+      background: transparent;
+      border: 1px solid white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: white;
+    }
 
-        .complaint .header {
-            font-weight: bold;
-            font-size: 1rem;
-            color: #00796b;
-        }
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
 
-        .status.cleared {
-            color: green;
-        }
+    .container {
+      width: 95%;
+      max-width: 1600px;
+      padding: 10px;
+    }
 
-        .status.uncleared {
-            color: red;
-        }
+    .complaints-columns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 50px;
+    }
 
-        img {
-            width: 50px;
-            height: 50px;
-            border: 1px solid #ccc;
-            margin-top: 10px;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
+    .complaints-column {
+      flex: 1 1 45%;
+      background: var(--card);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      max-height: 600px;
+      overflow-y: auto;
+    }
 
-        img:hover {
-            transform: scale(1.1);
-        }
+    .complaints-column h2 {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-bottom: 15px;
+      color: var(--primary);
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 5px;
+    }
 
-        /* Animation for fading and bouncing in complaints */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    #cleared-complaints {
+      background-color: rgba(76, 175, 80, 0.1);
+    }
 
-        @keyframes bounceIn {
-            0% {
-                transform: scale(0.5);
-            }
-            60% {
-                transform: scale(1.2);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
+    #uncleared-complaints {
+      background-color: rgba(244, 67, 54, 0.1);
+    }
 
-        /* Animation for slide-in effect */
-        @keyframes slideUp {
-            0% {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+    .complaint {
+      background: #f9f9f9;
+      margin-bottom: 15px;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
 
-        #suggestions-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: space-evenly;
-            margin-top: 50px;
-            animation: slideUp 1s ease-in-out;
-        }
+    .complaint:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
 
-        .suggestion {
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-            width: 250px;
-            height: 250px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
+    .complaint .header {
+      font-weight: bold;
+    }
 
-        .suggestion:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-        }
+    .status.cleared {
+      color: green;
+    }
 
-        .suggestion .header {
-            font-weight: bold;
-            font-size: 1.2rem;
-            color: #00796b;
-            margin-bottom: 10px;
-        }
+    .status.uncleared {
+      color: red;
+    }
 
-        .suggestion p {
-            color: #333;
-            font-size: 1rem;
-        }
-                nav {
-            background: rgba(29, 53, 87, 0.9);
-            color: white;
-            width: 100%;
-            text-align: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index:10;
-            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
-            animation: slideIn 1s ease-out;
-        }
+    img {
+      width: 60px;
+      height: 60px;
+      margin-top: 10px;
+      border-radius: 6px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+      transition: transform 0.3s ease;
+    }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-        }
+    img:hover {
+      transform: scale(1.1);
+    }
 
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            padding: 8px 15px;
-            transition: all 0.3s;
-            border-radius: 5px;
-        }
+    #suggestions-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+      gap: 20px;
+    }
 
-        nav ul li a:hover {
-            color: #ffd700;
-            background: rgba(255, 255, 255, 0.2);
-        }
-    </style>
+    .suggestion {
+      width: 250px;
+      background: var(--card);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .suggestion:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .suggestion .header {
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+
+    .suggestion p {
+      font-size: 1rem;
+    }
+
+    #loader-popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(255, 255, 255, 0.9);
+      z-index: 9999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid #ccc;
+      border-top: 6px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    #loader-popup span {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .complaints-columns {
+        flex-direction: column;
+      }
+
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+        gap: 10px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="home.html">Home</a></li>
-            <li><a href="c.html">File a Complaint</a></li>
-            <li><a href="sug.html">Suggestions</a></li>
-        </ul> 
-      </nav> 
-    <div class="container">
-        <h1>Complaints</h1>
-        <div class="complaints-columns">
-            <div class="complaints-column" id="cleared-complaints">
-                <h2>Cleared Complaints</h2>
-                <!-- Cleared complaints will be dynamically populated here -->
-            </div>
-            <div class="complaints-column" id="uncleared-complaints">
-                <h2>Uncleared Complaints</h2>
-                <!-- Uncleared complaints will be dynamically populated here -->
-            </div>
-        </div>
+  <div id="loader-popup">
+    <div class="spinner"></div>
+    <span>Loading data, please wait...</span>
+  </div>
 
-        <h1>Suggestions</h1>
-        <div id="suggestions-container">
-            <!-- Suggestions will be dynamically populated here -->
-        </div>
+  <nav>
+    <div class="logo">College Portal</div>
+    <ul>
+      <li onclick="location.href='home.html'">Home</li>
+      <li onclick="location.href='c.html'">File a Complaint</li>
+      <li onclick="location.href='sug.html'">Suggestion</li>
+    </ul>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+  </nav>
+
+  <div class="container" style="display: none;" id="content">
+    <h1>Complaints</h1>
+    <div class="complaints-columns">
+      <div class="complaints-column" id="cleared-complaints">
+        <h2>✅ Cleared Complaints</h2>
+      </div>
+      <div class="complaints-column" id="uncleared-complaints">
+        <h2>❌ Uncleared Complaints</h2>
+      </div>
     </div>
-    <script>
-        fetch('https://college-complants-1.onrender.com/fetch-complaints')
-            .then(response => response.json())  // Parse the response as JSON
-            .then(data => {
-                console.log('Fetched Complaints:', data);  // Log the data to inspect its structure
 
-                // Check if the 'complaints' property exists and is an array
-                if (Array.isArray(data.complaints)) {
-                    const clearedContainer = document.getElementById('cleared-complaints');
-                    const unclearedContainer = document.getElementById('uncleared-complaints');
+    <h1>Suggestions</h1>
+    <div id="suggestions-container"></div>
+  </div>
 
-                    clearedContainer.innerHTML = '';
-                    unclearedContainer.innerHTML = '';
+  <script>
+    const loader = document.getElementById('loader-popup');
+    const content = document.getElementById('content');
 
-                    data.complaints.forEach(complaint => {
-                        const complaintDiv = document.createElement('div');
-                        complaintDiv.classList.add('complaint');
-                        const statusClass = complaint.status === 'cleared' ? 'cleared' : 'uncleared';
+    const loadData = async () => {
+      try {
+        const [complaintRes, suggestionRes] = await Promise.all([
+          fetch('https://college-complants-1.onrender.com/fetch-complaints'),
+          fetch('https://college-complants-1.onrender.com/fetch-suggestions')
+        ]);
 
-                        complaintDiv.innerHTML = `
-                            <div class="header">Complaint ID: ${complaint.complaintId || 'N/A'}</div>
-                            <div class="header">Category: ${complaint.category}</div>
-                            <div>Description: ${complaint.description}</div>
-                            <div class="status ${statusClass}">Status: ${complaint.status}</div>
-                            <div>
-                                File: ${
-                                    complaint.filepath
-                                    ? `<a href="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" target="_blank">
-                                            <img src="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" 
-                                                 alt="Complaint Image" 
-                                                 onerror="this.src='/path-to-placeholder-image.jpg'; this.alt='Image not found';">
-                                       </a>`
-                                    : 'No File'
-                                }
-                            </div>
-                        `;
+        const complaintsData = await complaintRes.json();
+        const suggestionsData = await suggestionRes.json();
 
-                        if (complaint.status === 'cleared') {
-                            clearedContainer.appendChild(complaintDiv);
-                        } else {
-                            unclearedContainer.appendChild(complaintDiv);
-                        }
-                    });
-                } else {
-                    console.error('Fetched complaints is not an array:', data.complaints);  // Log an error if the data isn't an array
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching complaints:', error);
-                const clearedContainer = document.getElementById('cleared-complaints');
-                const unclearedContainer = document.getElementById('uncleared-complaints');
-                clearedContainer.innerHTML = `<div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">Failed to load complaints. Please try again later.</div>`;
-                unclearedContainer.innerHTML = `<div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">Failed to load complaints. Please try again later.</div>`;
-            });
+        const clearedContainer = document.getElementById('cleared-complaints');
+        const unclearedContainer = document.getElementById('uncleared-complaints');
+        const suggestionsContainer = document.getElementById('suggestions-container');
 
-        fetch('https://college-complants-1.onrender.com/fetch-suggestions')
-            .then(response => response.json())
-            .then(data => {
-                console.log('Fetched Suggestions:', data);  // Log the data to inspect its structure
+        clearedContainer.innerHTML = '<h2>✅ Cleared Complaints</h2>';
+        unclearedContainer.innerHTML = '<h2>❌ Uncleared Complaints</h2>';
+        suggestionsContainer.innerHTML = '';
 
-                // Check if the 'suggestions' property exists and is an array
-                if (Array.isArray(data.suggestions)) {
-                    const suggestionsContainer = document.getElementById('suggestions-container');
-                    suggestionsContainer.innerHTML = "";
+        complaintsData.complaints?.forEach(complaint => {
+          const div = document.createElement('div');
+          div.className = 'complaint';
+          const statusClass = complaint.status === 'cleared' ? 'cleared' : 'uncleared';
 
-                    data.suggestions.forEach(suggestion => {
-                        const suggestionDiv = document.createElement('div');
-                        suggestionDiv.classList.add('suggestion');
-                        suggestionDiv.innerHTML = `
-                            <div class="header">Name: ${suggestion.name}</div>
-                            <p>Suggestion: ${suggestion.suggestcol}</p>
-                        `;
-                        suggestionsContainer.appendChild(suggestionDiv);
-                    });
-                } else {
-                    console.error('Fetched suggestions is not an array:', data.suggestions);  // Log an error if the data isn't an array
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching suggestions:', error);
-                const suggestionsContainer = document.getElementById('suggestions-container');
-                suggestionsContainer.innerHTML = `<div style="color: red; font-weight: bold; text-align: center; margin-top: 20px;">Failed to load suggestions. Please try again later.</div>`;
-            });
-    </script>
+          div.innerHTML = `
+            <div class="header">Complaint ID: ${complaint.complaintId || 'N/A'}</div>
+            <div class="header">Category: ${complaint.category}</div>
+            <div>Description: ${complaint.description}</div>
+            <div class="status ${statusClass}">Status: ${complaint.status}</div>
+            <div>
+              File: ${
+                complaint.filepath
+                  ? `<a href="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" target="_blank">
+                        <img src="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" 
+                             alt="Complaint Image"
+                             onerror="this.src='/placeholder.jpg'; this.alt='Image not found';">
+                     </a>`
+                  : 'No File'
+              }
+            </div>
+          `;
+
+          (complaint.status === 'cleared'
+            ? clearedContainer
+            : unclearedContainer
+          ).appendChild(div);
+        });
+
+        suggestionsData.suggestions?.forEach(suggestion => {
+          const suggestionDiv = document.createElement('div');
+          suggestionDiv.className = 'suggestion';
+          suggestionDiv.innerHTML = `
+            <div class="header">Name: ${suggestion.name}</div>
+            <p>Suggestion: ${suggestion.suggestcol}</p>
+          `;
+          suggestionsContainer.appendChild(suggestionDiv);
+        });
+      } catch (err) {
+        alert("Error fetching data. Please try again later.");
+        console.error(err);
+      } finally {
+        loader.style.display = 'none';
+        content.style.display = 'block';
+      }
+    };
+
+    function toggleTheme() {
+      const current = document.documentElement.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    }
+
+    loadData();
+  </script>
 </body>
 </html>
