@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>College Complaint Portal</title>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -95,6 +95,7 @@
       margin: 3px 0;
     }
 
+    /* Mobile view styles */
     @media (max-width: 768px) {
       .nav-links {
         display: none;
@@ -104,6 +105,7 @@
         background: rgba(0, 0, 0, 0.9);
         width: 100%;
         flex-direction: column;
+        z-index: 999; /* Ensure the menu appears above other content */
       }
 
       .nav-links.show {
@@ -116,6 +118,11 @@
 
       .nav-title {
         font-size: 16px;
+      }
+
+      .logo img {
+        width: 180px; /* Adjust logo size for mobile */
+        height: 50px;
       }
     }
 
@@ -292,7 +299,7 @@
   <script>
     AOS.init();
 
-    // Toggle dropdown menu
+    // Toggle dropdown menu on hamburger button click
     document.getElementById("menu-toggle").addEventListener("click", () => {
       document.getElementById("nav-links").classList.toggle("show");
     });
