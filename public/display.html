@@ -299,8 +299,8 @@
             <div>
               File: ${
                 complaint.filepath
-                  ? `<a href="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" target="_blank">
-                        <img src="/fetch-image?category=${encodeURIComponent(complaint.category)}&description=${encodeURIComponent(complaint.description)}" 
+                  ? `<a href="${complaint.filepath}" target="_blank">
+                        <img src="${complaint.filepath}" 
                              alt="Complaint Image"
                              onerror="this.src='/placeholder.jpg'; this.alt='Image not found';">
                      </a>`
@@ -347,7 +347,6 @@
 
             const isOpen = target.classList.contains('open');
 
-            // Close all others
             document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('open'));
             document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
 
