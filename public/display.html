@@ -67,51 +67,67 @@
       color: white;
     }
 
-    h1 {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-top: 30px;
-      margin-bottom: 20px;
-    }
-
     .container {
       width: 95%;
       max-width: 1600px;
       padding: 10px;
     }
 
-    .complaints-columns {
+    .accordion-header {
+      background: var(--primary);
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin: 15px 0 5px;
+      font-size: 1.3rem;
       display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      margin-bottom: 50px;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+    }
+
+    .accordion-arrow {
+      display: none;
+      transition: transform 0.3s ease;
+    }
+
+    .accordion-header.active .accordion-arrow {
+      transform: rotate(90deg);
+    }
+
+    .accordion-content {
+      transition: max-height 0.5s ease, padding 0.5s ease;
+    }
+
+    @media (max-width: 768px) {
+      .accordion-arrow {
+        display: inline-block;
+      }
+
+      .accordion-content {
+        overflow: hidden;
+        max-height: 0;
+        padding-top: 0;
+      }
+
+      .accordion-content.open {
+        max-height: 2000px;
+        padding-top: 10px;
+      }
+
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+        gap: 10px;
+      }
     }
 
     .complaints-column {
-      flex: 1 1 45%;
       background: var(--card);
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-      max-height: 600px;
-      overflow-y: auto;
-    }
-
-    .complaints-column h2 {
-      text-align: center;
-      font-size: 1.4rem;
-      margin-bottom: 15px;
-      color: var(--primary);
-      border-bottom: 2px solid var(--primary);
-      padding-bottom: 5px;
-    }
-
-    #cleared-complaints {
-      background-color: rgba(76, 175, 80, 0.1);
-    }
-
-    #uncleared-complaints {
-      background-color: rgba(244, 67, 54, 0.1);
     }
 
     .complaint {
@@ -154,13 +170,6 @@
       transform: scale(1.1);
     }
 
-    #suggestions-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-      gap: 20px;
-    }
-
     .suggestion {
       width: 250px;
       background: var(--card);
@@ -170,6 +179,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      margin-bottom: 15px;
     }
 
     .suggestion:hover {
@@ -219,19 +229,6 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
-    @media (max-width: 768px) {
-      .complaints-columns {
-        flex-direction: column;
-      }
-
-      nav ul {
-        flex-direction: column;
-        width: 100%;
-        margin-top: 10px;
-        gap: 10px;
-      }
-    }
   </style>
 </head>
 <body>
@@ -244,25 +241,27 @@
     <div class="logo">College Portal</div>
     <ul>
       <li onclick="location.href='main.html'">Home</li>
-      <li onclick="location.href='/cc.html'">File a Complaint</li>
-      <li onclick="location.href='/suggest.html'">Suggestion</li>
+      <li onclick="location.href='cc.html'">File a Complaint</li>
+      <li onclick="location.href='suggest.html'">Suggestion</li>
     </ul>
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
   </nav>
 
   <div class="container" style="display: none;" id="content">
-    <h1>Complaints</h1>
-    <div class="complaints-columns">
-      <div class="complaints-column" id="cleared-complaints">
-        <h2>✅ Cleared Complaints</h2>
-      </div>
-      <div class="complaints-column" id="uncleared-complaints">
-        <h2>❌ Uncleared Complaints</h2>
-      </div>
+    <div class="accordion-header" data-target="cleared-complaints">
+      ✅ Cleared Complaints <span class="accordion-arrow">▶</span>
     </div>
+    <div class="accordion-content complaints-column" id="cleared-complaints"></div>
 
-    <h1>Suggestions</h1>
-    <div id="suggestions-container"></div>
+    <div class="accordion-header" data-target="uncleared-complaints">
+      ❌ Uncleared Complaints <span class="accordion-arrow">▶</span>
+    </div>
+    <div class="accordion-content complaints-column" id="uncleared-complaints"></div>
+
+    <div class="accordion-header" data-target="suggestions-container">
+      💡 Suggestions <span class="accordion-arrow">▶</span>
+    </div>
+    <div class="accordion-content" id="suggestions-container" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 20px;"></div>
   </div>
 
   <script>
@@ -283,8 +282,8 @@
         const unclearedContainer = document.getElementById('uncleared-complaints');
         const suggestionsContainer = document.getElementById('suggestions-container');
 
-        clearedContainer.innerHTML = '<h2>✅ Cleared Complaints</h2>';
-        unclearedContainer.innerHTML = '<h2>❌ Uncleared Complaints</h2>';
+        clearedContainer.innerHTML = '';
+        unclearedContainer.innerHTML = '';
         suggestionsContainer.innerHTML = '';
 
         complaintsData.complaints?.forEach(complaint => {
@@ -339,7 +338,32 @@
       document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
     }
 
-    loadData();
+    function setupAccordion() {
+      if (window.innerWidth <= 768) {
+        document.querySelectorAll('.accordion-header').forEach(header => {
+          header.addEventListener('click', () => {
+            const targetId = header.getAttribute('data-target');
+            const target = document.getElementById(targetId);
+
+            const isOpen = target.classList.contains('open');
+
+            // Close all others
+            document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('open'));
+            document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+
+            if (!isOpen) {
+              target.classList.add('open');
+              header.classList.add('active');
+            }
+          });
+        });
+      } else {
+        document.querySelectorAll('.accordion-content').forEach(el => el.classList.add('open'));
+      }
+    }
+
+    window.addEventListener('resize', setupAccordion);
+    loadData().then(setupAccordion);
   </script>
 </body>
 </html>
