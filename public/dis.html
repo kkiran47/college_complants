@@ -43,7 +43,7 @@
 
     nav .logo {
       font-weight: bold;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
 
     nav ul {
@@ -65,6 +65,26 @@
       padding: 5px 10px;
       border-radius: 5px;
       color: white;
+    }
+
+    .marquee-box {
+      width: 100%;
+      background: #d3f6f4;
+      color: var(--text);
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 1.1rem;
+      padding: 10px 0;
+      margin-top: 5px;
+    }
+
+    .marquee-box:hover {
+      background: #b2ebf2;
+      color: #00796b;
+    }
+
+    .marquee-box marquee {
+      font-weight: 600;
     }
 
     .container {
@@ -104,7 +124,7 @@
     }
 
     .accordion-content.open {
-      max-height: 600px;
+      max-height: 500px;
       padding-top: 10px;
       overflow-y: auto;
       scrollbar-width: thin;
@@ -121,15 +141,19 @@
     }
 
     @media (max-width: 768px) {
-      .accordion-arrow {
-        display: inline-block;
-      }
-
       nav ul {
         flex-direction: column;
         width: 100%;
         margin-top: 10px;
         gap: 10px;
+      }
+
+      .accordion-arrow {
+        display: inline-block;
+      }
+
+      nav .logo {
+        font-size: 2rem;
       }
     }
 
@@ -138,6 +162,8 @@
       padding: 20px;
       border-radius: 12px;
       box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      max-height: 400px;
+      overflow-y: auto;
     }
 
     .complaint {
@@ -257,6 +283,10 @@
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
   </nav>
 
+  <div class="marquee-box">
+    <marquee scrollamount="4">📢 For filing a complaint, go to the Student section. Suggestions are welcome!</marquee>
+  </div>
+
   <div class="container" style="display: none;" id="content">
     <div class="accordion-header" data-target="cleared-complaints">
       ✅ Cleared Complaints <span class="accordion-arrow">▶</span>
@@ -354,7 +384,6 @@
           header.addEventListener('click', () => {
             const targetId = header.getAttribute('data-target');
             const target = document.getElementById(targetId);
-
             const isOpen = target.classList.contains('open');
 
             document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('open'));
