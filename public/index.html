@@ -11,10 +11,7 @@
       padding: 0;
       background: linear-gradient(to right, #43e97b, #38f9d7);
       height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      overflow-x: hidden;
     }
 
     .navbar {
@@ -34,8 +31,15 @@
     .navbar img {
       height: 60px;
       margin-left: 20px;
-      width: 700px;
+      width: auto;
       border-radius: 10px;
+    }
+
+    .navbar-title {
+      color: white;
+      font-size: 24px;
+      margin-left: 10px;
+      font-weight: bold;
     }
 
     .menu-toggle {
@@ -68,23 +72,43 @@
       color: #66bb6a;
     }
 
-    .container {
+    .marquee-container {
       margin-top: 80px;
       width: 100%;
+      overflow: hidden;
+    }
+
+    .marquee-text {
+      color: #fff;
+      font-size: 16px;
+      background: #2c3e50;
+      padding: 6px 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .marquee-text:hover {
+      background: #4caf50;
+      color: #fff000;
+    }
+
+    .container {
+      margin-top: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
+      padding-top: 60px;
     }
 
     .login-box {
       display: flex;
       justify-content: space-around;
-      width: 80%;
-      max-width: 800px;
+      width: 90%;
+      max-width: 900px;
       padding: 30px;
       background: aquamarine;
       border-radius: 20px;
       box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+      flex-wrap: wrap;
     }
 
     .section {
@@ -97,6 +121,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin: 10px;
       transition: transform 0.4s ease, box-shadow 0.4s ease;
     }
 
@@ -107,8 +132,17 @@
 
     .section h3 {
       font-size: 2rem;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       color: white;
+    }
+
+    .section img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-bottom: 10px;
+      border-radius: 50%;
+      border: 2px solid white;
     }
 
     .student-btn, .login-btn {
@@ -123,6 +157,11 @@
       letter-spacing: 2px;
       margin: 20px 0;
       width: 80%;
+      transition: transform 0.1s ease-in-out;
+    }
+
+    .student-btn:active, .login-btn:active {
+      transform: scale(0.95);
     }
 
     .student-btn:hover, .login-btn:hover {
@@ -147,10 +186,6 @@
       box-shadow: 0 0 5px rgba(102, 187, 106, 0.5);
     }
 
-    .login-input:hover {
-      box-shadow: 0 0 10px rgba(102, 187, 106, 0.6);
-    }
-
     .modal {
       display: none;
       position: fixed;
@@ -162,7 +197,6 @@
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      animation: fadeIn 0.5s ease-in-out;
     }
 
     .modal-content {
@@ -175,8 +209,6 @@
       max-width: 400px;
       width: 80%;
       box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
-      transform: scale(0.8);
-      animation: scaleUp 0.5s ease-in-out forwards;
     }
 
     .modal-content button {
@@ -188,21 +220,10 @@
       border-radius: 25px;
       cursor: pointer;
       margin-top: 20px;
-      transition: background 0.3s ease;
     }
 
     .modal-content button:hover {
       background: #e64a19;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes scaleUp {
-      from { transform: scale(0.8); }
-      to { transform: scale(1); }
     }
 
     .spinner {
@@ -218,80 +239,64 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
-
     @media (max-width: 768px) {
-      .navbar img {
-        width: 60%;
-        margin-left: 10px;
-      }
+  .navbar img {
+    width: 70px; /* increased size */
+    height: auto;
+  }
 
-      .menu-toggle {
-        display: block;
-      }
+  .navbar-title {
+    font-size: 20px;
+  }
 
-      .navbar ul {
-        display: none;
-        flex-direction: column;
-        background-color: #2c3e50;
-        position: absolute;
-        top: 80px;
-        right: 0;
-        width: 100%;
-        padding: 10px 0;
-      }
+  .menu-toggle {
+    display: block;
+  }
 
-      .navbar ul.show {
-        display: flex;
-      }
+  .navbar ul {
+    display: none;
+    flex-direction: column;
+    background-color: #2c3e50;
+    position: absolute;
+    top: 80px;
+    right: 0;
+    width: 100%;
+    padding: 10px 0;
+  }
 
-      .navbar ul li {
-        margin: 10px 0;
-      }
+  .navbar ul.show {
+    display: flex;
+  }
 
-      .login-box {
-        flex-direction: column;
-        width: 90%;
-        padding: 20px;
-      }
+  .login-box {
+    flex-direction: column;
+    width: 90%;
+  }
 
-      .section {
-        width: 100%;
-        margin-bottom: 20px;
-      }
+  .section {
+    width: 100%;
+  }
 
-      .student-btn, .login-btn {
-        width: 100%;
-        font-size: 18px;
-        padding: 12px 0;
-      }
+  .student-btn, .login-btn {
+    width: 100%;
+    font-size: 18px;
+  }
 
-      .login-input {
-        width: 100%;
-        font-size: 18px;
-        padding: 15px;
-      }
+  .login-input {
+    width: 100%;
+    font-size: 18px;
+  }
+}
 
-      .modal-content {
-        width: 90%;
-        max-width: 350px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .navbar img {
-        width: 80%;
-        height: auto;
-      }
-
-      .modal-content {
-        width: 90%;
-      }
-    }
   </style>
 </head>
 <body>
+
   <nav class="navbar">
-    <img src="https://vignaniit.edu.in/images/09%20copy-1.jpg" alt="Logo">
+    <div style="display: flex; align-items: center;">
+      <img src="https://vignaniit.edu.in/images/09%20copy-1.jpg" alt="Logo" />
+      <div class="navbar-title">College Complaint Portal</div>
+    </div>
     <div class="menu-toggle" onclick="toggleMenu()">☰</div>
     <ul id="nav-links">
       <li><a href="index.html">Home</a></li>
@@ -300,14 +305,20 @@
     </ul>
   </nav>
 
+  <div class="marquee-container">
+    <marquee class="marquee-text" behavior="scroll" direction="left">For filing a complaint, please go to the Student Portal!</marquee>
+  </div>
+
   <div class="container">
     <div class="login-box">
       <div class="section">
         <h3>Student</h3>
+        <img src="https://cdn-icons-png.flaticon.com/512/219/219986.png" alt="Student Icon">
         <button class="student-btn" onclick="redirectToStudentPage()">Go to Student Portal</button>
       </div>
       <div class="section">
         <h3>Administration</h3>
+        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Admin Icon">
         <form id="admin-login-form">
           <input type="text" id="admin-username" class="login-input" placeholder="Username" required><br>
           <input type="password" id="admin-password" class="login-input" placeholder="Password" required><br>
@@ -317,7 +328,7 @@
     </div>
   </div>
 
-  <!-- Error/Info Modal -->
+  <!-- Error Modal -->
   <div class="modal" id="alert-modal">
     <div class="modal-content">
       <p id="alert-message">Invalid Username or Password.</p>
@@ -332,6 +343,8 @@
       <div class="spinner"></div>
     </div>
   </div>
+
+  <audio id="bg-music" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" autoplay loop muted></audio>
 
   <script>
     let shouldRedirect = false;
@@ -394,5 +407,6 @@
       }
     }
   </script>
+
 </body>
 </html>
