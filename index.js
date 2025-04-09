@@ -195,7 +195,26 @@ app.put('/update-status', async (req, res) => {
     res.status(500).send("Failed to update status");
   }
 });
+app.delete('/delete-complaint', async (req, res) => {
+  const { complaintId } = req.body;
 
-// === Start Server ===
+  if (!complaintId) return res.status(400).send("Complaint ID is required");
+
+  try {
+    const complaintRef = db.collection('complaints').doc(complaintId.toString());
+    const complaintDoc = await complaintRef.get();
+
+    if (!complaintDoc.exists) {
+      return res.status(404).send("Complaint not found");
+    }
+
+    await complaintRef.delete();
+    res.send("Complaint deleted successfully");
+  } catch (error) {
+    console.error("Error deleting complaint:", error);
+    res.status(500).send("Failed to delete complaint");
+  }
+});
+
 const PORT = process.env.PORT || 4348;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
