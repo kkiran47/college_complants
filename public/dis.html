@@ -84,6 +84,7 @@
       justify-content: space-between;
       align-items: center;
       transition: background 0.3s ease;
+      cursor: pointer;
     }
 
     .accordion-arrow {
@@ -96,23 +97,32 @@
     }
 
     .accordion-content {
+      overflow: hidden;
+      max-height: 0;
+      padding-top: 0;
       transition: max-height 0.5s ease, padding 0.5s ease;
+    }
+
+    .accordion-content.open {
+      max-height: 600px;
+      padding-top: 10px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--primary) transparent;
+    }
+
+    .accordion-content.open::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .accordion-content.open::-webkit-scrollbar-thumb {
+      background-color: var(--primary);
+      border-radius: 10px;
     }
 
     @media (max-width: 768px) {
       .accordion-arrow {
         display: inline-block;
-      }
-
-      .accordion-content {
-        overflow: hidden;
-        max-height: 0;
-        padding-top: 0;
-      }
-
-      .accordion-content.open {
-        max-height: 2000px;
-        padding-top: 10px;
       }
 
       nav ul {
