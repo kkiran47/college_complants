@@ -103,12 +103,12 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      transition: background 0.3s ease;
       cursor: pointer;
+      transition: background 0.3s ease;
     }
 
     .accordion-arrow {
-      display: none;
+      display: inline-block;
       transition: transform 0.3s ease;
     }
 
@@ -119,13 +119,10 @@
     .accordion-content {
       overflow: hidden;
       max-height: 0;
-      padding-top: 0;
-      transition: max-height 0.5s ease, padding 0.5s ease;
+      transition: max-height 0.5s ease;
     }
 
     .accordion-content.open {
-      max-height: 500px;
-      padding-top: 10px;
       overflow-y: auto;
       scrollbar-width: thin;
       scrollbar-color: var(--primary) transparent;
@@ -140,20 +137,9 @@
       border-radius: 10px;
     }
 
-    @media (max-width: 768px) {
-      nav ul {
-        flex-direction: column;
-        width: 100%;
-        margin-top: 10px;
-        gap: 10px;
-      }
-
-      .accordion-arrow {
-        display: inline-block;
-      }
-
-      nav .logo {
-        font-size: 2rem;
+    @media (min-width: 769px) {
+      .accordion-content {
+        max-height: none !important;
       }
     }
 
@@ -276,15 +262,15 @@
   <nav>
     <div class="logo">College Portal</div>
     <ul>
-      <li onclick="location.href='home.html'">Home</li>
-      <li onclick="location.href='c.html'">File a Complaint</li>
-      <li onclick="location.href='sug.html'">Suggestion</li>
+      <li onclick="location.href='main.html'">Home</li>
+      <li onclick="location.href='cc.html'">File a Complaint</li>
+      <li onclick="location.href='suggest.html'">Suggestion</li>
     </ul>
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
   </nav>
 
   <div class="marquee-box">
-    <marquee scrollamount="4">📢 For filing a complaint, go to the Student section. Suggestions are welcome!</marquee>
+    <marquee scrollamount="4">📢 Welcome ! ,Check Your complaints .</marquee>
   </div>
 
   <div class="container" style="display: none;" id="content">
@@ -340,9 +326,9 @@
               File: ${
                 complaint.filepath
                   ? `<a href="${complaint.filepath}" target="_blank">
-                        <img src="${complaint.filepath}" 
-                             alt="Complaint Image"
-                             onerror="this.src='/placeholder.jpg'; this.alt='Image not found';">
+                      <img src="${complaint.filepath}" 
+                           alt="Complaint Image"
+                           onerror="this.src='/placeholder.jpg'; this.alt='Image not found';">
                      </a>`
                   : 'No File'
               }
@@ -379,25 +365,40 @@
     }
 
     function setupAccordion() {
-      if (window.innerWidth <= 768) {
-        document.querySelectorAll('.accordion-header').forEach(header => {
-          header.addEventListener('click', () => {
-            const targetId = header.getAttribute('data-target');
-            const target = document.getElementById(targetId);
-            const isOpen = target.classList.contains('open');
+      const headers = document.querySelectorAll('.accordion-header');
 
-            document.querySelectorAll('.accordion-content').forEach(el => el.classList.remove('open'));
-            document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+      headers.forEach(header => {
+        const targetId = header.getAttribute('data-target');
+        const content = document.getElementById(targetId);
 
-            if (!isOpen) {
-              target.classList.add('open');
-              header.classList.add('active');
-            }
+        const clonedHeader = header.cloneNode(true);
+        header.parentNode.replaceChild(clonedHeader, header);
+
+        clonedHeader.addEventListener('click', () => {
+          const isOpen = content.classList.contains('open');
+          document.querySelectorAll('.accordion-content').forEach(el => {
+            el.classList.remove('open');
+            el.style.maxHeight = null;
           });
+          document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
+
+          if (!isOpen) {
+            content.classList.add('open');
+            content.style.maxHeight = content.scrollHeight + 'px';
+            clonedHeader.classList.add('active');
+          }
         });
-      } else {
-        document.querySelectorAll('.accordion-content').forEach(el => el.classList.add('open'));
-      }
+
+        if (window.innerWidth > 768) {
+          content.classList.add('open');
+          content.style.maxHeight = 'none';
+          clonedHeader.classList.add('active');
+        } else {
+          content.classList.remove('open');
+          content.style.maxHeight = null;
+          clonedHeader.classList.remove('active');
+        }
+      });
     }
 
     window.addEventListener('resize', setupAccordion);
