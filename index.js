@@ -225,5 +225,28 @@ app.post('/update-remark', async (req, res) => {
   }
 });
 
+app.post('/update-status-with-image', upload.single('image'), async (req, res) => {
+  try {
+    const { complaintId, status } = req.body;
+    const file = req.file;
+
+    if (!complaintId || !status || !file) {
+      return res.status(400).json({ success: false, message: 'Missing required fields.' });
+    }
+
+    const fileUrl = file.path; // Cloudinary URL
+
+    await db.collection('complaints').doc(complaintId).update({
+      status,
+      updatedfile: fileUrl,
+      updatedAt: new Date().toISOString(),
+    });
+
+    res.status(200).json({ success: true, message: 'Status and image updated successfully.', fileUrl });
+  } catch (error) {
+    console.error('Error updating status with image:', error);
+    res.status(500).json({ success: false, message: 'Internal server error.' });
+  }
+});
 const PORT = process.env.PORT || 4348;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
