@@ -166,14 +166,15 @@ app.get('/fetch-suggestions', async (req, res) => {
   }
 });
 
-// === Update Complaint Status ===
+
 app.put('/update-status', async (req, res) => {
   const { complaintId, status } = req.body;
   try {
     const complaintRef = db.collection('complaints').doc(complaintId.toString());
     const complaintDoc = await complaintRef.get();
 
-    if (!complaintDoc.exists) return res.status(404).send("Complaint not found");
+    if (!complaintDoc.exists) return res.status(404).json({ success: false, message: "Complaint not found" });
+
     await complaintRef.update({ status });
 
     if (status === 'cleared') {
@@ -183,16 +184,17 @@ app.put('/update-status', async (req, res) => {
           from: process.env.EMAIL_USER,
           to: student.email,
           subject: 'Complaint Cleared',
-          text: `Dear ${student.sname}, your complaint has been marked as cleared.`
+          text: `Dear ${student.sname}, your complaint has been ${student.updatedfile},marked as cleared.`
         }, (error) => {
           if (error) console.error("Email error:", error);
         });
       }
     }
-    res.send("Status updated successfully");
+
+    res.json({ success: true, message: "Status updated successfully" }); // ✅ Fix
   } catch (error) {
     console.error("Error updating status:", error);
-    res.status(500).send("Failed to update status");
+    res.status(500).json({ success: false, message: "Failed to update status" }); // ✅ Fix
   }
 });
 app.delete('/delete-complaint', async (req, res) => {
