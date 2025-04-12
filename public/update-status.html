@@ -116,6 +116,31 @@
       border: 1px solid #ccc;
     }
 
+    .remarks-input {
+      padding: 8px;
+      border-radius: 6px;
+      background: #f5f5f5;
+      border: 1px solid #ccc;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .save-btn {
+      padding: 7px 14px;
+      background: linear-gradient(135deg, #4caf50, #388e3c);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+      display: none;
+    }
+
+    .save-btn:hover {
+      background: linear-gradient(135deg, #45a049, #2e7d32);
+      transform: scale(1.05);
+    }
+
     .delete-btn {
       padding: 7px 14px;
       background: linear-gradient(135deg, #f44336, #d32f2f);
@@ -131,7 +156,7 @@
       transform: scale(1.05);
     }
 
-    .popup-modal, .loading-modal, .confirm-modal {
+    .popup-modal, .loading-modal, .confirm-modal, .image-upload-modal {
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
@@ -147,7 +172,8 @@
 
     .popup-modal.active,
     .loading-modal.active,
-    .confirm-modal.active {
+    .confirm-modal.active,
+    .image-upload-modal.active {
       opacity: 1;
       pointer-events: auto;
     }
@@ -237,6 +263,38 @@
       color: black;
     }
 
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .export-btn {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, #0288d1, #01579b);
+      border: none;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+
+    .export-btn:hover {
+      background: linear-gradient(135deg, #0277bd, #014f8e);
+      transform: scale(1.05);
+    }
+
+    .category-filter {
+      padding: 8px;
+      border-radius: 6px;
+      background: #f5f5f5;
+      border: 1px solid #ccc;
+      min-width: 150px;
+    }
+
     @media (max-width: 768px) {
       nav {
         flex-direction: column;
@@ -274,12 +332,21 @@
       }
 
       .delete-btn,
-      select {
+      select,
+      .remarks-input,
+      .save-btn,
+      .export-btn,
+      .category-filter {
         font-size: 0.9em;
       }
 
       .modal-content {
         width: 85%;
+      }
+
+      .controls {
+        flex-direction: column;
+        align-items: flex-start;
       }
     }
   </style>
@@ -296,16 +363,23 @@
 
   <div class="container">
     <h1>Update Complaint Status</h1>
+    <div class="controls">
+      <select id="category-filter" class="category-filter">
+        <option value="all">All Categories</option>
+      </select>
+      <button class="export-btn" onclick="exportToCSV()">Export to CSV</button>
+    </div>
     <div class="table-wrapper">
       <table>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Category</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Update</th>
-            <th>Delete</th>
+            <th>📂 Category</th>
+            <th>📝 Description</th>
+            <th>📌 Status</th>
+            <th>🗒️ Remarks</th>
+            <th>✅ Update</th>
+            <th>🗑️ Delete</th>
           </tr>
         </thead>
         <tbody id="complaints-table"></tbody>
@@ -313,10 +387,9 @@
     </div>
   </div>
 
-  <!-- Modals (same as your original, no change needed) -->
   <div class="popup-modal" id="popup-modal">
     <div class="modal-content">
-      <span class="close-button" onclick="hidePopup()">&times;</span>
+      <span class="close-button" onclick="hidePopup()">×</span>
       <p id="popup-message">Message</p>
     </div>
   </div>
@@ -327,7 +400,7 @@
 
   <div class="confirm-modal" id="confirm-modal">
     <div class="modal-content">
-      <span class="close-button" onclick="hideConfirm()">&times;</span>
+      <span class="close-button" onclick="hideConfirm()">×</span>
       <p>Are you sure you want to delete this complaint?</p>
       <div class="modal-actions">
         <button class="btn confirm" id="confirm-delete">Yes</button>
@@ -335,12 +408,30 @@
       </div>
     </div>
   </div>
+
+  <div class="image-upload-modal" id="image-upload-modal">
+    <div class="modal-content">
+      <span class="close-button" onclick="hideImageUpload()">×</span>
+      <p>Would you like to upload an image for this cleared complaint?</p>
+      <input type="file" id="image-upload-input" accept="image/*">
+      <div class="modal-actions">
+        <button class="btn confirm" onclick="uploadImage()">Upload</button>
+        <button class="btn cancel" onclick="skipImageUpload()">Skip</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const loadingModal = document.getElementById('loading-modal');
     const popupModal = document.getElementById('popup-modal');
     const popupMessage = document.getElementById('popup-message');
     const confirmModal = document.getElementById('confirm-modal');
+    const imageUploadModal = document.getElementById('image-upload-modal');
+    const categoryFilter = document.getElementById('category-filter');
     let deleteTargetId = null;
+    let allComplaints = [];
+    let pendingComplaintId = null;
+    let pendingStatus = null;
 
     function showPopup(message) {
       popupMessage.textContent = message;
@@ -368,69 +459,316 @@
       loadingModal.classList.remove('active');
     }
 
-    async function fetchComplaints() {
+    function showImageUpload(complaintId, status) {
+      pendingComplaintId = complaintId;
+      pendingStatus = status;
+      imageUploadModal.classList.add('active');
+    }
+
+    function hideImageUpload() {
+      imageUploadModal.classList.remove('active');
+      document.getElementById('image-upload-input').value = '';
+      pendingComplaintId = null;
+      pendingStatus = null;
+    }
+
+    function escapeCSV(value) {
+      if (value === null || value === undefined) return '""';
+      return `"${String(value).replace(/"/g, '""')}"`;
+    }
+
+    function exportToCSV() {
+      const headers = ['ID', 'Category', 'Description', 'Status', 'Remarks'];
+      const csvRows = [headers.map(escapeCSV).join(',')];
+
+      allComplaints.forEach(c => {
+        const row = [
+          c.complaintId,
+          c.category,
+          c.description,
+          c.status,
+          c.remarks || ''
+        ].map(escapeCSV);
+        csvRows.push(row.join(','));
+      });
+
+      const csvData = csvRows.join('\n');
+      const blob = new Blob([csvData], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'complaints.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }
+
+    async function updateStatus(complaintId, status) {
       showLoader();
       try {
-        const res = await fetch('https://college-complants-1.onrender.com/fetch-complaints');
+        const res = await fetch('https://college-complants-1.onrender.com/update-status', {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ complaintId: complaintId.toString(), status })
+        });
+
+        // Log response details for debugging
+        console.log('Update status request:', { complaintId, status });
+        console.log('Update status response:', {
+          status: res.status,
+          headers: Object.fromEntries(res.headers.entries())
+        });
+
+        // Check content type
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await res.text();
+          console.error('Non-JSON response from /update-status:', text);
+          throw new Error(`Expected JSON, received: ${text.slice(0, 50)}...`);
+        }
+
         const data = await res.json();
-        const table = document.getElementById('complaints-table');
-        table.innerHTML = "";
-
-        if (data.success && Array.isArray(data.complaints)) {
-          data.complaints.forEach(c => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-              <td>${c.complaintId}</td>
-              <td>${c.category}</td>
-              <td>${c.description}</td>
-              <td class="status ${c.status}">${c.status}</td>
-              <td>
-                <select data-id="${c.complaintId}">
-                  <option value="cleared" ${c.status === 'cleared' ? 'selected' : ''}>Cleared</option>
-                  <option value="uncleared" ${c.status === 'uncleared' ? 'selected' : ''}>Uncleared</option>
-                </select>
-              </td>
-              <td><button class="delete-btn" data-id="${c.complaintId}">Delete</button></td>
-            `;
-            table.appendChild(row);
-
-            row.querySelector('select').addEventListener('change', async (e) => {
-              const id = e.target.getAttribute('data-id');
-              const newStatus = e.target.value;
-              showLoader();
-              try {
-                const res = await fetch('https://college-complants-1.onrender.com/update-status', {
-                  method: 'PUT',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ complaintId: id, status: newStatus })
-                });
-                if (res.ok) {
-                  showPopup("Complaint status updated!");
-                  fetchComplaints();
-                } else {
-                  showPopup("Failed to update status.");
-                }
-              } catch (err) {
-                showPopup("Error updating status.");
-              } finally {
-                hideLoader();
-              }
-            });
-
-            row.querySelector('.delete-btn').addEventListener('click', () => {
-              showConfirm(c.complaintId);
-            });
-          });
+        if (data.success) {
+          showPopup(data.message || 'Complaint status updated successfully!');
+          fetchComplaints();
         } else {
-          showPopup("No complaints found.");
+          console.error('Backend error from /update-status:', data.message);
+          showPopup(data.message || 'Failed to update status.');
         }
       } catch (err) {
-        console.error(err);
-        showPopup("Error loading complaints.");
+        console.error('Frontend error in updateStatus:', err);
+        showPopup(`Error updating status: ${err.message}`);
       } finally {
         hideLoader();
       }
     }
+
+    async function uploadImage() {
+      if (!pendingComplaintId || !pendingStatus) {
+        showPopup('No complaint selected for update.');
+        return;
+      }
+
+      const imageInput = document.getElementById('image-upload-input');
+      const file = imageInput.files[0];
+
+      if (!file) {
+        showPopup('Please select an image or click Skip.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('complaintId', pendingComplaintId.toString());
+      formData.append('status', pendingStatus);
+      formData.append('image', file);
+
+      showLoader();
+      try {
+        const res = await fetch('https://college-complants-1.onrender.com/update-status-with-image', {
+          method: 'POST',
+          body: formData
+        });
+
+        // Log response details for debugging
+        console.log('Upload image request:', { complaintId: pendingComplaintId, status: pendingStatus });
+        console.log('Upload image response:', {
+          status: res.status,
+          headers: Object.fromEntries(res.headers.entries())
+        });
+
+        // Check content type
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await res.text();
+          console.error('Non-JSON response from /update-status-with-image:', text);
+          throw new Error(`Expected JSON, received: ${text.slice(0, 50)}...`);
+        }
+
+        const data = await res.json();
+        if (data.success) {
+          showPopup(data.message || 'Status and image updated successfully!');
+          fetchComplaints();
+        } else {
+          console.error('Backend error from /update-status-with-image:', data.message);
+          showPopup(data.message || 'Failed to update status with image.');
+        }
+      } catch (err) {
+        console.error('Frontend error in uploadImage:', err);
+        showPopup(`Error updating status with image: ${err.message}`);
+      } finally {
+        hideLoader();
+        hideImageUpload();
+      }
+    }
+
+    async function skipImageUpload() {
+      if (pendingComplaintId && pendingStatus) {
+        await updateStatus(pendingComplaintId, pendingStatus);
+      }
+      hideImageUpload();
+    }
+
+    function renderComplaints(complaints) {
+      const table = document.getElementById('complaints-table');
+      table.innerHTML = '';
+
+      complaints.forEach(c => {
+        const row = document.createElement('tr');
+        row.dataset.category = c.category;
+        row.innerHTML = `
+          <td>${c.complaintId}</td>
+          <td>${c.category}</td>
+          <td>${c.description}</td>
+          <td class="status ${c.status}">${c.status}</td>
+          <td>
+            <input type="text" class="remarks-input" data-id="${c.complaintId}" value="${c.remarks || ''}" placeholder="Enter remarks">
+            <button class="save-btn" data-id="${c.complaintId}" style="display: none">Save</button>
+          </td>
+          <td>
+            <select data-id="${c.complaintId}">
+              <option value="cleared" ${c.status === 'cleared' ? 'selected' : ''}>Cleared</option>
+              <option value="uncleared" ${c.status === 'uncleared' ? 'selected' : ''}>Uncleared</option>
+            </select>
+          </td>
+          <td><button class="delete-btn" data-id="${c.complaintId}">Delete</button></td>
+        `;
+        table.appendChild(row);
+
+        row.querySelector('select').addEventListener('change', async (e) => {
+          const id = e.target.getAttribute('data-id');
+          const newStatus = e.target.value;
+
+          if (newStatus === 'cleared') {
+            showImageUpload(id, newStatus);
+          } else {
+            await updateStatus(id, newStatus);
+          }
+        });
+
+        const remarksInput = row.querySelector('.remarks-input');
+        const saveBtn = row.querySelector('.save-btn');
+        let savedRemarks = c.remarks || '';
+
+        remarksInput.addEventListener('input', () => {
+          const currentValue = remarksInput.value.trim();
+          saveBtn.style.display = currentValue !== savedRemarks ? 'inline-block' : 'none';
+        });
+
+        saveBtn.addEventListener('click', async () => {
+          const id = saveBtn.getAttribute('data-id');
+          const remarks = remarksInput.value.trim();
+          showLoader();
+          try {
+            const res = await fetch('https://college-complants-1.onrender.com/update-remark', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ complaintId: id.toString(), remarks })
+            });
+
+            console.log('Update remark response:', {
+              status: res.status,
+              headers: Object.fromEntries(res.headers.entries())
+            });
+
+            const contentType = res.headers.get('content-type');
+            if (!contentType || !contentType.includes('application/json')) {
+              const text = await res.text();
+              console.error('Non-JSON response from /update-remark:', text);
+              throw new Error(`Expected JSON, received: ${text.slice(0, 50)}...`);
+            }
+
+            const data = await res.json();
+            if (res.ok) {
+              showPopup(data.message || 'Remarks saved successfully!');
+              savedRemarks = remarks;
+              saveBtn.style.display = 'none';
+              fetchComplaints();
+            } else {
+              console.error('Backend error from /update-remark:', data.message);
+              showPopup(data.message || 'Failed to save remarks.');
+            }
+          } catch (err) {
+            console.error('Frontend error in save remarks:', err);
+            showPopup(`Error saving remarks: ${err.message}`);
+          } finally {
+            hideLoader();
+          }
+        });
+
+        row.querySelector('.delete-btn').addEventListener('click', () => {
+          showConfirm(c.complaintId);
+        });
+      });
+    }
+
+    async function fetchComplaints() {
+      showLoader();
+      try {
+        const res = await fetch('https://college-complants-1.onrender.com/fetch-complaints');
+        console.log('Fetch complaints response:', {
+          status: res.status,
+          headers: Object.fromEntries(res.headers.entries())
+        });
+
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await res.text();
+          console.error('Non-JSON response from /fetch-complaints:', text);
+          throw new Error(`Expected JSON, received: ${text.slice(0, 50)}...`);
+        }
+
+        const data = await res.json();
+        if (data.success && Array.isArray(data.complaints)) {
+          allComplaints = data.complaints;
+
+          const staticCategories = ['Other', 'Faculty', 'Facilities', 'Administration', 'Hostels'];
+          const dynamicCategories = [...new Set(allComplaints.map(c => c.category))];
+          const allCategories = [...new Set([...staticCategories, ...dynamicCategories])].sort();
+
+          categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+          allCategories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+          });
+
+          const selectedCategory = categoryFilter.value;
+          const filteredComplaints = selectedCategory === 'all'
+            ? allComplaints
+            : allComplaints.filter(c => c.category === selectedCategory);
+          renderComplaints(filteredComplaints);
+        } else {
+          showPopup(data.message || 'No complaints found.');
+          allComplaints = [];
+          const staticCategories = ['Other', 'Faculty', 'Facilities', 'Administration'];
+          categoryFilter.innerHTML = '<option value="all">All Categories</option>';
+          staticCategories.sort().forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoryFilter.appendChild(option);
+          });
+          renderComplaints([]);
+        }
+      } catch (err) {
+        console.error('Frontend error in fetchComplaints:', err);
+        showPopup(`Error loading complaints: ${err.message}`);
+        allComplaints = [];
+        renderComplaints([]);
+      } finally {
+        hideLoader();
+      }
+    }
+
+    categoryFilter.addEventListener('change', () => {
+      const selectedCategory = categoryFilter.value;
+      const filteredComplaints = selectedCategory === 'all'
+        ? allComplaints
+        : allComplaints.filter(c => c.category === selectedCategory);
+      renderComplaints(filteredComplaints);
+    });
 
     document.getElementById('confirm-delete').addEventListener('click', async () => {
       if (!deleteTargetId) return;
@@ -440,17 +778,32 @@
         const res = await fetch('https://college-complants-1.onrender.com/delete-complaint', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ complaintId: deleteTargetId })
+          body: JSON.stringify({ complaintId: deleteTargetId.toString() })
         });
 
+        console.log('Delete complaint response:', {
+          status: res.status,
+          headers: Object.fromEntries(res.headers.entries())
+        });
+
+        const contentType = res.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await res.text();
+          console.error('Non-JSON response from /delete-complaint:', text);
+          throw new Error(`Expected JSON, received: ${text.slice(0, 50)}...`);
+        }
+
+        const data = await res.json();
         if (res.ok) {
-          showPopup("Complaint deleted successfully.");
+          showPopup(data.message || 'Complaint deleted successfully.');
           fetchComplaints();
         } else {
-          showPopup("Failed to delete complaint.");
+          console.error('Backend error from /delete-complaint:', data.message);
+          showPopup(data.message || 'Failed to delete complaint.');
         }
       } catch (err) {
-        showPopup("Error deleting complaint.");
+        console.error('Frontend error in delete complaint:', err);
+        showPopup(`Error deleting complaint: ${err.message}`);
       } finally {
         deleteTargetId = null;
         hideLoader();
@@ -459,6 +812,5 @@
 
     fetchComplaints();
   </script>
-
 </body>
 </html>
