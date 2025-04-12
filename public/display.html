@@ -251,6 +251,10 @@
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
+
+    .complaint div {
+      margin-bottom: 8px;
+    }
   </style>
 </head>
 <body>
@@ -270,7 +274,7 @@
   </nav>
 
   <div class="marquee-box">
-    <marquee scrollamount="4">📢 Welcome ! ,Check Your complaints .</marquee>
+    <marquee scrollamount="4">📢 For filing a complaint, go to the Student section. Suggestions are welcome!</marquee>
   </div>
 
   <div class="container" style="display: none;" id="content">
@@ -322,6 +326,7 @@
             <div class="header">Category: ${complaint.category}</div>
             <div>Description: ${complaint.description}</div>
             <div class="status ${statusClass}">Status: ${complaint.status}</div>
+            <div>Remarks: ${complaint.remarks ? complaint.remarks : '-'}</div>
             <div>
               File: ${
                 complaint.filepath
