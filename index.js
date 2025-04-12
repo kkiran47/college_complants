@@ -215,20 +215,15 @@ app.delete('/delete-complaint', async (req, res) => {
     res.status(500).send("Failed to delete complaint");
   }
 });
-app.put('/update-remark', async (req, res) => {
-  const { complaintId, remark } = req.body;
-  if (!complaintId || remark === undefined) {
-    return res.status(400).json({ success: false, message: 'Missing complaintId or remark' });
-  }
-
+app.post('/update-remark', async (req, res) => {
+  const { complaintId, remarks } = req.body;
   try {
-    const docRef = db.collection('complaints').doc(complaintId.toString());
-    await docRef.update({ remarks: remark });
-    res.json({ success: true, message: 'Remark updated successfully' });
+    await db.collection('complaints').doc(complaintId).update({ remarks });
+    res.json({ success: true });
   } catch (error) {
-    console.error('Error updating remark:', error);
-    res.status(500).json({ success: false, message: 'Error updating remark' });
+    res.status(500).json({ error: 'Failed to update remarks' });
   }
 });
+
 const PORT = process.env.PORT || 4348;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
