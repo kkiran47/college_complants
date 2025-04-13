@@ -193,7 +193,8 @@
     }
 
     .suggestion {
-      width: 250px;
+      width: 100%;
+      max-width: 300px;
       background: var(--card);
       padding: 20px;
       border-radius: 10px;
@@ -202,6 +203,7 @@
       flex-direction: column;
       justify-content: space-between;
       margin-bottom: 15px;
+      box-sizing: border-box;
     }
 
     .suggestion:hover {
@@ -255,6 +257,34 @@
     .complaint div {
       margin-bottom: 8px;
     }
+
+    #suggestions-container {
+      min-height: 100px;
+      width: 100%;
+    }
+
+    .accordion-content.open {
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 5px;
+      }
+
+      .suggestion {
+        margin: 10px auto;
+      }
+
+      .accordion-content {
+        transition: max-height 0.3s ease;
+      }
+
+      #suggestions-container.open {
+        max-height: 600px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -296,57 +326,49 @@
   <script>
     const loader = document.getElementById('loader-popup');
     const content = document.getElementById('content');
-  
+
     const loadData = async () => {
       try {
         const [complaintRes, suggestionRes] = await Promise.all([
           fetch('https://college-complants-1.onrender.com/fetch-complaints'),
           fetch('https://college-complants-1.onrender.com/fetch-suggestions')
         ]);
-  
+
         const complaintsData = await complaintRes.json();
         const suggestionsData = await suggestionRes.json();
-  
+
+        console.log('Suggestions Data:', suggestionsData);
+
         const clearedContainer = document.getElementById('cleared-complaints');
         const unclearedContainer = document.getElementById('uncleared-complaints');
         const suggestionsContainer = document.getElementById('suggestions-container');
-  
+
         clearedContainer.innerHTML = '';
         unclearedContainer.innerHTML = '';
         suggestionsContainer.innerHTML = '';
-  
+
         complaintsData.complaints?.forEach(complaint => {
           const div = document.createElement('div');
           div.className = 'complaint';
           const statusClass = complaint.status === 'cleared' ? 'cleared' : 'uncleared';
-  
-          // Calculate time taken to clear (only for cleared complaints)
+
           let timeTaken = '';
           if (complaint.status === 'cleared' && complaint.timestamp && complaint.updatedAt) {
             try {
-              // Log raw values for debugging
-              console.log('Complaint ID:', complaint.complaintId || 'N/A');
-              console.log('Raw timestamp:', complaint.timestamp);
-              console.log('Raw updatedAt:', complaint.updatedAt);
-  
-              // Handle Firestore Timestamp object
               let createdDate;
               if (typeof complaint.timestamp === 'object' && '_seconds' in complaint.timestamp) {
-                // Convert Firestore Timestamp (_seconds and _nanoseconds) to Date
                 const seconds = complaint.timestamp._seconds;
                 const nanoseconds = complaint.timestamp._nanoseconds || 0;
                 createdDate = new Date(seconds * 1000 + nanoseconds / 1000000);
               } else {
                 throw new Error('Timestamp is not a valid Firestore Timestamp object');
               }
-  
-              // Parse updatedAt (ISO format, already in UTC)
+
               const updatedDate = new Date(complaint.updatedAt);
               if (isNaN(updatedDate.getTime())) {
                 throw new Error('Invalid updatedAt format');
               }
-  
-              // Calculate difference
+
               const diffMs = updatedDate - createdDate;
               if (diffMs < 0) {
                 timeTaken = `<div>Time Taken to Clear: Invalid (negative duration)</div>`;
@@ -357,13 +379,12 @@
               }
             } catch (e) {
               console.error('Error parsing dates for complaint:', complaint.complaintId || 'N/A', e);
-              timeTaken = `<div>Time Taken to Clear: Unable to calculate (check console for details)</div>`;
+              timeTaken = `<div>Time Taken to Clear: Unable to calculate</div>`;
             }
           } else {
-            console.warn('Missing or invalid timestamp/updatedAt for complaint:', complaint.complaintId || 'N/A');
             timeTaken = `<div>Time Taken to Clear: Missing date data</div>`;
           }
-  
+
           div.innerHTML = `
             <div class="header">Complaint ID: ${complaint.complaintId || 'N/A'}</div>
             <div class="header">Category: ${complaint.category}</div>
@@ -371,7 +392,7 @@
             <div>Description: ${complaint.description}</div>
             <div class="status ${statusClass}">Status: ${complaint.status}</div>
             <div>Remarks: ${complaint.remarks ? complaint.remarks : '-'}</div>
-            ${complaint.status === 'cleared' ? timeTaken : ''} <!-- Add time taken only for cleared complaints -->
+            ${complaint.status === 'cleared' ? timeTaken : ''}
             <div>
               File: ${
                 complaint.filepath
@@ -396,41 +417,52 @@
                 : ''
             }
           `;
-  
+
           if (complaint.status === 'cleared') {
             clearedContainer.appendChild(div);
           } else {
             unclearedContainer.appendChild(div);
           }
         });
-  
-        suggestionsData.suggestions?.forEach(suggestion => {
-          const suggestionDiv = document.createElement('div');
-          suggestionDiv.className = 'suggestion';
-          suggestionDiv.innerHTML = `
-            <div class="header">Name: ${suggestion.name}</div>
-            <p>Suggestion: ${suggestion.suggestcol}</p>
-          `;
-          suggestionsContainer.appendChild(suggestionDiv);
-        });
-  
+
+        if (suggestionsData.suggestions?.length > 0) {
+          suggestionsData.suggestions.forEach(suggestion => {
+            const suggestionDiv = document.createElement('div');
+            suggestionDiv.className = 'suggestion';
+            suggestionDiv.innerHTML = `
+              <div class="header">Name: ${suggestion.name}</div>
+              <p>Suggestion: ${suggestion.suggestcol}</p>
+            `;
+            suggestionsContainer.appendChild(suggestionDiv);
+          });
+        } else {
+          suggestionsContainer.innerHTML = '<p>No suggestions available.</p>';
+          console.warn('No suggestions found or empty array.');
+        }
+
+        const suggestionsAccordion = document.getElementById('suggestions-container');
+        const suggestionsHeader = document.querySelector('.accordion-header[data-target="suggestions-container"]');
+        suggestionsAccordion.classList.add('open');
+        suggestionsHeader.classList.add('active');
+
         loader.style.display = 'none';
         content.style.display = 'block';
-  
+
       } catch (error) {
         console.error('Fetch error:', error);
         loader.style.display = 'none';
         content.style.display = 'block';
+        document.getElementById('suggestions-container').innerHTML = '<p>Error loading suggestions.</p>';
       }
     };
-  
+
     window.onload = loadData;
-  
+
     const toggleTheme = () => {
       const currentTheme = document.documentElement.getAttribute('data-theme');
       document.documentElement.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
     };
-  
+
     const accordionHeaders = document.querySelectorAll('.accordion-header');
     accordionHeaders.forEach(header => {
       header.addEventListener('click', () => {
