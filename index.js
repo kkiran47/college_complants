@@ -141,18 +141,24 @@ app.post('/suggestform', upload.none(), async (req, res) => {
     res.status(500).json({ success: false, message: 'Registration unsuccessful' });
   }
 });
-
-// === Fetch Complaints ===
 app.get('/fetch-complaints', async (req, res) => {
   try {
     const snapshot = await db.collection('complaints').get();
-    const complaints = snapshot.docs.map(doc => doc.data());
+    const complaints = snapshot.docs.map(doc => {
+      const complaintData = doc.data();
+      return {
+        ...complaintData,
+        complaintId: doc.id,  // Add complaintId if needed for better tracking
+        branch: complaintData.branch || 'Not specified',  // Add branch field, default to 'Not specified'
+      };
+    });
     res.json({ success: true, complaints });
   } catch (err) {
     console.error("Error fetching complaints:", err);
     res.status(500).json({ success: false, message: "Failed to fetch complaints" });
   }
 });
+
 
 // === Fetch Suggestions ===
 app.get('/fetch-suggestions', async (req, res) => {
@@ -165,6 +171,7 @@ app.get('/fetch-suggestions', async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch suggestions" });
   }
 });
+
 app.put('/update-status', async (req, res) => {
   const { complaintId, status } = req.body;
   try {
@@ -173,7 +180,11 @@ app.put('/update-status', async (req, res) => {
 
     if (!complaintDoc.exists) return res.status(404).json({ success: false, message: "Complaint not found" });
 
-    await complaintRef.update({ status });
+    // Update status and set updatedAt to current time
+    await complaintRef.update({
+      status,
+      updatedAt: new Date().toISOString()
+    });
 
     if (status === 'cleared') {
       const student = complaintDoc.data();
@@ -200,7 +211,6 @@ app.put('/update-status', async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to update status" });
   }
 });
-
 app.delete('/delete-complaint', async (req, res) => {
   const { complaintId } = req.body;
 
