@@ -165,8 +165,6 @@ app.get('/fetch-suggestions', async (req, res) => {
     res.status(500).json({ success: false, message: "Failed to fetch suggestions" });
   }
 });
-
-
 app.put('/update-status', async (req, res) => {
   const { complaintId, status } = req.body;
   try {
@@ -183,20 +181,26 @@ app.put('/update-status', async (req, res) => {
         transporter.sendMail({
           from: process.env.EMAIL_USER,
           to: student.email,
-          subject: 'Complaint Cleared',
-          text: `Dear ${student.sname}, your complaint has been ${student.updatedfile},marked as cleared.`
-        }, (error) => {
-          if (error) console.error("Email error:", error);
+          subject: 'Your Complaint Has Been Resolved',
+          text: `Dear ${student.sname},\n\nYour complaint has been successfully marked as cleared.\n\n` +
+                `You can view the update or attachment here: ${student.updatedfile ? student.updatedfile : "No update available."}\n\n` +
+                `Thank you for bringing this to our attention. We appreciate your patience.\n\nBest regards,\nVignan's College Complaint Management Team`
+        }, (error, info) => {
+          if (error) {
+            console.error("Email error:", error);
+          } else {
+            console.log("Email sent:", info.response);
+          }
         });
       }
     }
-
-    res.json({ success: true, message: "Status updated successfully" }); // ✅ Fix
+    res.json({ success: true, message: "Status updated successfully" });
   } catch (error) {
     console.error("Error updating status:", error);
-    res.status(500).json({ success: false, message: "Failed to update status" }); // ✅ Fix
+    res.status(500).json({ success: false, message: "Failed to update status" });
   }
 });
+
 app.delete('/delete-complaint', async (req, res) => {
   const { complaintId } = req.body;
 
