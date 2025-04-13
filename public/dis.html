@@ -293,40 +293,85 @@
     </div>
     <div class="accordion-content" id="suggestions-container" style="display: flex; flex-wrap: wrap; justify-content: space-evenly; gap: 20px;"></div>
   </div>
-
   <script>
     const loader = document.getElementById('loader-popup');
     const content = document.getElementById('content');
-
+  
     const loadData = async () => {
       try {
         const [complaintRes, suggestionRes] = await Promise.all([
           fetch('https://college-complants-1.onrender.com/fetch-complaints'),
           fetch('https://college-complants-1.onrender.com/fetch-suggestions')
         ]);
-
+  
         const complaintsData = await complaintRes.json();
         const suggestionsData = await suggestionRes.json();
-
+  
         const clearedContainer = document.getElementById('cleared-complaints');
         const unclearedContainer = document.getElementById('uncleared-complaints');
         const suggestionsContainer = document.getElementById('suggestions-container');
-
+  
         clearedContainer.innerHTML = '';
         unclearedContainer.innerHTML = '';
         suggestionsContainer.innerHTML = '';
-
+  
         complaintsData.complaints?.forEach(complaint => {
           const div = document.createElement('div');
           div.className = 'complaint';
           const statusClass = complaint.status === 'cleared' ? 'cleared' : 'uncleared';
-
+  
+          // Calculate time taken to clear (only for cleared complaints)
+          let timeTaken = '';
+          if (complaint.status === 'cleared' && complaint.timestamp && complaint.updatedAt) {
+            try {
+              // Log raw values for debugging
+              console.log('Complaint ID:', complaint.complaintId || 'N/A');
+              console.log('Raw timestamp:', complaint.timestamp);
+              console.log('Raw updatedAt:', complaint.updatedAt);
+  
+              // Handle Firestore Timestamp object
+              let createdDate;
+              if (typeof complaint.timestamp === 'object' && '_seconds' in complaint.timestamp) {
+                // Convert Firestore Timestamp (_seconds and _nanoseconds) to Date
+                const seconds = complaint.timestamp._seconds;
+                const nanoseconds = complaint.timestamp._nanoseconds || 0;
+                createdDate = new Date(seconds * 1000 + nanoseconds / 1000000);
+              } else {
+                throw new Error('Timestamp is not a valid Firestore Timestamp object');
+              }
+  
+              // Parse updatedAt (ISO format, already in UTC)
+              const updatedDate = new Date(complaint.updatedAt);
+              if (isNaN(updatedDate.getTime())) {
+                throw new Error('Invalid updatedAt format');
+              }
+  
+              // Calculate difference
+              const diffMs = updatedDate - createdDate;
+              if (diffMs < 0) {
+                timeTaken = `<div>Time Taken to Clear: Invalid (negative duration)</div>`;
+              } else {
+                const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                const diffHours = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                timeTaken = `<div>Time Taken to Clear: ${diffDays} day(s), ${diffHours} hour(s)</div>`;
+              }
+            } catch (e) {
+              console.error('Error parsing dates for complaint:', complaint.complaintId || 'N/A', e);
+              timeTaken = `<div>Time Taken to Clear: Unable to calculate (check console for details)</div>`;
+            }
+          } else {
+            console.warn('Missing or invalid timestamp/updatedAt for complaint:', complaint.complaintId || 'N/A');
+            timeTaken = `<div>Time Taken to Clear: Missing date data</div>`;
+          }
+  
           div.innerHTML = `
             <div class="header">Complaint ID: ${complaint.complaintId || 'N/A'}</div>
             <div class="header">Category: ${complaint.category}</div>
+            <div>Branch: ${complaint.branch || 'Not specified'}</div>
             <div>Description: ${complaint.description}</div>
             <div class="status ${statusClass}">Status: ${complaint.status}</div>
             <div>Remarks: ${complaint.remarks ? complaint.remarks : '-'}</div>
+            ${complaint.status === 'cleared' ? timeTaken : ''} <!-- Add time taken only for cleared complaints -->
             <div>
               File: ${
                 complaint.filepath
@@ -334,18 +379,31 @@
                       <img src="${complaint.filepath}" 
                            alt="Complaint Image"
                            onerror="this.src='/placeholder.jpg'; this.alt='Image not found';">
-                     </a>`
+                     </a>` 
                   : 'No File'
               }
             </div>
+            ${
+              complaint.updatedfile && complaint.status === 'cleared'
+                ? ` 
+                  <div>
+                    Updated Image: <a href="${complaint.updatedfile}" target="_blank">
+                      <img src="${complaint.updatedfile}" 
+                           alt="Updated Complaint Image"
+                           onerror="this.src='/placeholder.jpg'; this.alt='Image not found';">
+                    </a>
+                  </div>` 
+                : ''
+            }
           `;
-
-          (complaint.status === 'cleared'
-            ? clearedContainer
-            : unclearedContainer
-          ).appendChild(div);
+  
+          if (complaint.status === 'cleared') {
+            clearedContainer.appendChild(div);
+          } else {
+            unclearedContainer.appendChild(div);
+          }
         });
-
+  
         suggestionsData.suggestions?.forEach(suggestion => {
           const suggestionDiv = document.createElement('div');
           suggestionDiv.className = 'suggestion';
@@ -355,59 +413,32 @@
           `;
           suggestionsContainer.appendChild(suggestionDiv);
         });
-      } catch (err) {
-        alert("Error fetching data. Please try again later.");
-        console.error(err);
-      } finally {
+  
+        loader.style.display = 'none';
+        content.style.display = 'block';
+  
+      } catch (error) {
+        console.error('Fetch error:', error);
         loader.style.display = 'none';
         content.style.display = 'block';
       }
     };
-
-    function toggleTheme() {
-      const current = document.documentElement.getAttribute('data-theme');
-      document.documentElement.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
-    }
-
-    function setupAccordion() {
-      const headers = document.querySelectorAll('.accordion-header');
-
-      headers.forEach(header => {
-        const targetId = header.getAttribute('data-target');
-        const content = document.getElementById(targetId);
-
-        const clonedHeader = header.cloneNode(true);
-        header.parentNode.replaceChild(clonedHeader, header);
-
-        clonedHeader.addEventListener('click', () => {
-          const isOpen = content.classList.contains('open');
-          document.querySelectorAll('.accordion-content').forEach(el => {
-            el.classList.remove('open');
-            el.style.maxHeight = null;
-          });
-          document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('active'));
-
-          if (!isOpen) {
-            content.classList.add('open');
-            content.style.maxHeight = content.scrollHeight + 'px';
-            clonedHeader.classList.add('active');
-          }
-        });
-
-        if (window.innerWidth > 768) {
-          content.classList.add('open');
-          content.style.maxHeight = 'none';
-          clonedHeader.classList.add('active');
-        } else {
-          content.classList.remove('open');
-          content.style.maxHeight = null;
-          clonedHeader.classList.remove('active');
-        }
+  
+    window.onload = loadData;
+  
+    const toggleTheme = () => {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', currentTheme === 'light' ? 'dark' : 'light');
+    };
+  
+    const accordionHeaders = document.querySelectorAll('.accordion-header');
+    accordionHeaders.forEach(header => {
+      header.addEventListener('click', () => {
+        const target = document.getElementById(header.getAttribute('data-target'));
+        target.classList.toggle('open');
+        header.classList.toggle('active');
       });
-    }
-
-    window.addEventListener('resize', setupAccordion);
-    loadData().then(setupAccordion);
+    });
   </script>
 </body>
 </html>
