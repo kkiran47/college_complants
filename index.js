@@ -241,22 +241,48 @@ app.post('/update-remark', async (req, res) => {
   }
 });
 
+
 app.post('/update-status-with-image', upload.single('image'), async (req, res) => {
   try {
     const { complaintId, status } = req.body;
     const file = req.file;
 
-    if (!complaintId || !status || !file) {
+    if (!complaintId || !status) {
       return res.status(400).json({ success: false, message: 'Missing required fields.' });
     }
 
-    const fileUrl = file.path; // Cloudinary URL
+    const fileUrl = file ? file.path : null; // Cloudinary URL, may be null if no image uploaded
 
-    await db.collection('complaints').doc(complaintId).update({
+    // Update complaint status and add the file URL if it exists
+    const complaintRef = db.collection('complaints').doc(complaintId);
+    await complaintRef.update({
       status,
       updatedfile: fileUrl,
       updatedAt: new Date().toISOString(),
     });
+
+    // Send email if status is cleared
+    if (status === 'cleared') {
+      const complaintDoc = await complaintRef.get();
+      const student = complaintDoc.data();
+
+      if (student?.email && student?.sname) {
+        transporter.sendMail({
+          from: process.env.EMAIL_USER,
+          to: student.email,
+          subject: 'Your Complaint Has Been Resolved',
+          text: `Dear ${student.sname},\n\nYour complaint has been successfully marked as cleared.\n\n` +
+                `You can view the update or attachment here: ${fileUrl ? fileUrl : "No update available."}\n\n` +
+                `Thank you for bringing this to our attention. We appreciate your patience.\n\nBest regards,\nVignan's College Complaint Management Team`
+        }, (error, info) => {
+          if (error) {
+            console.error("Email error:", error);
+          } else {
+            console.log("Email sent:", info.response);
+          }
+        });
+      }
+    }
 
     res.status(200).json({ success: true, message: 'Status and image updated successfully.', fileUrl });
   } catch (error) {
@@ -264,5 +290,6 @@ app.post('/update-status-with-image', upload.single('image'), async (req, res) =
     res.status(500).json({ success: false, message: 'Internal server error.' });
   }
 });
+
 const PORT = process.env.PORT || 4348;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
