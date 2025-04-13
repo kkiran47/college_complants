@@ -92,9 +92,8 @@ app.post('/admin-login', async (req, res) => {
   }
 });
 
-// === Handle Complaint Form (with file upload) ===
 app.post('/handleform', upload.single('file'), async (req, res) => {
-  const { category, description, sname, email } = req.body;
+  const { category, description,branch, sname, email } = req.body;
   const timestamp = firebase.firestore.Timestamp.now();
 
   try {
@@ -112,6 +111,7 @@ app.post('/handleform', upload.single('file'), async (req, res) => {
     await db.collection('complaints').doc(complaintId.toString()).set({
       complaintId,
       category,
+      branch,
       description,
       filepath: fileUrl,
       sname,
